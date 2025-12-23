@@ -12,5 +12,4 @@ import lombok.Getter;
 @Getter
 public class PostCommentCreatedEvent {
     private final PostCommentDto postComment;
-    private final int score = 1;
 }

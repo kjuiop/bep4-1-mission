@@ -12,5 +12,4 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PostCreatedEvent {
     private final PostDto post;
-    private final int score = 3;
 }
