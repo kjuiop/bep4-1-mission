@@ -6,6 +6,8 @@ import com.back.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author : JAKE
  * @date : 25. 12. 23.
@@ -18,6 +20,10 @@ public class PostService {
 
     public long count() {
         return postRepository.count();
+    }
+
+    public Optional<Post> findById(long id) {
+        return postRepository.findById(id);
     }
 
     public Post write(Member author, String title, String content) {
