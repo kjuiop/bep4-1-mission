@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
-import static lombok.AccessLevel.PROTECTED;
 /**
  * @author : JAKE
  * @date : 25. 12. 23.
  */
 @MappedSuperclass
 @Getter
-@Setter(value = PROTECTED)
+@Setter
 @NoArgsConstructor
 public abstract class ReplicaMember extends BaseMember {
 

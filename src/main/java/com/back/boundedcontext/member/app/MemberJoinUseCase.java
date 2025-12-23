@@ -2,8 +2,11 @@ package com.back.boundedcontext.member.app;
 
 import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.member.out.repository.MemberRepository;
+import com.back.global.eventpublisher.EventPublisher;
 import com.back.global.exception.DomainException;
 import com.back.global.rsdata.RsData;
+import com.back.shared.member.dto.MemberDto;
+import com.back.shared.member.event.MemberJoinedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberJoinUseCase {
 
     private final MemberRepository memberRepository;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public RsData<Member> join(String username, String password, String nickname) {
@@ -25,6 +29,8 @@ public class MemberJoinUseCase {
         });
 
         Member saved = memberRepository.save(new Member(username, password, nickname));
+
+        eventPublisher.publish(new MemberJoinedEvent(new MemberDto(saved)));
 
         return new RsData<>("201-1", "%d번 회원이 생성되었습니다.".formatted(saved.getId()), saved);
     }
