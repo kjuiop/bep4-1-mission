@@ -3,6 +3,7 @@ package com.back.boundedcontext.member.entity;
 import com.back.global.jpa.entity.BaseIdAndTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
  * @date : 25. 12. 23.
  */
 @Entity
+@Getter
 @NoArgsConstructor
 public class Member extends BaseIdAndTime {
 
@@ -28,7 +30,7 @@ public class Member extends BaseIdAndTime {
         this.nickname = nickname;
     }
 
-    public int increaseActivityScore(int amount) {
-        return this.activityScore += amount;
+    public void increaseActivityScore(int amount) {
+        this.activityScore += amount;
     }
 }
