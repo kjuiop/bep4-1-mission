@@ -5,6 +5,7 @@ import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostComment;
 import com.back.boundedcontext.post.out.PostRepository;
 import com.back.global.eventpublisher.EventPublisher;
+import com.back.global.rsdata.RsData;
 import com.back.shared.post.dto.PostCommentDto;
 import com.back.shared.post.dto.PostDto;
 import com.back.shared.post.event.PostCommentCreatedEvent;
@@ -25,23 +26,25 @@ public class PostWriteUseCase {
     private final EventPublisher eventPublisher;
 
     @Transactional
-    public Post write(Member author, String title, String content) {
+    public RsData<Post> write(Member author, String title, String content) {
         Post post = new Post(author, title, content);
         Post saved = postRepository.save(post);
 
         eventPublisher.publish(
                 new PostCreatedEvent(new PostDto(saved))
         );
-        return saved;
+        return new RsData<>("201-1", "%d번 글이 생성되었습니다.".formatted(post.getId()), post);
     }
 
     @Transactional
-    public void writeComment(Post post, Member author, String content) {
-        PostComment saved = post.addComment(author, content);
+    public RsData<PostComment> writeComment(Post post, Member author, String content) {
+        PostComment comment = post.addComment(author, content);
         postRepository.save(post);
 
         eventPublisher.publish(
-                new PostCommentCreatedEvent(new PostCommentDto(saved))
+                new PostCommentCreatedEvent(new PostCommentDto(comment))
         );
+
+        return new RsData<>("201-2", "%d번 댓글이 생성되었습니다.".formatted(comment.getId()), comment);
     }
 }

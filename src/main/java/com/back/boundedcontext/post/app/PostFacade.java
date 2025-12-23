@@ -2,7 +2,9 @@ package com.back.boundedcontext.post.app;
 
 import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.post.domain.Post;
+import com.back.boundedcontext.post.domain.PostComment;
 import com.back.boundedcontext.post.out.PostRepository;
+import com.back.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +28,13 @@ public class PostFacade {
     }
 
     @Transactional
-    public Post write(Member author, String title, String content) {
+    public RsData<Post> write(Member author, String title, String content) {
         return postWriteUseCase.write(author, title, content);
     }
 
     @Transactional
-    public void writeComment(Post post, Member author, String content) {
-        postWriteUseCase.writeComment(post, author, content);
+    public RsData<PostComment> writeComment(Post post, Member author, String content) {
+        return postWriteUseCase.writeComment(post, author, content);
     }
 
     @Transactional(readOnly = true)
