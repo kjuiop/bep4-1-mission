@@ -1,5 +1,6 @@
 package com.back.boundedcontext.post.app;
 
+import com.back.boundedcontext.member.app.MemberFacade;
 import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostComment;
@@ -24,6 +25,7 @@ public class PostWriteUseCase {
 
     private final PostRepository postRepository;
     private final EventPublisher eventPublisher;
+    private final MemberFacade memberFacade;
 
     @Transactional
     public RsData<Post> write(Member author, String title, String content) {
@@ -45,6 +47,9 @@ public class PostWriteUseCase {
                 new PostCommentCreatedEvent(new PostCommentDto(comment))
         );
 
-        return new RsData<>("201-2", "%d번 댓글이 생성되었습니다.".formatted(comment.getId()), comment);
+        String randomSecureTip = memberFacade.getRandomSecureTip();
+
+        return new RsData<>("201-1",
+                "%d번 댓글이 생성되었습니다. 보안 팁 : %s".formatted(comment.getId(), randomSecureTip), comment);
     }
 }
