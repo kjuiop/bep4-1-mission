@@ -5,6 +5,7 @@ import com.back.global.jpa.entity.BaseIdAndTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
  * @date : 25. 12. 23.
  */
 @Entity
+@Table(name = "POST_POST_COMMENT")
 @Getter
 @NoArgsConstructor
 public class PostComment extends BaseIdAndTime {

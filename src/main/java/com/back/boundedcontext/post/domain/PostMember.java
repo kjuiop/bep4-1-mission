@@ -1,4 +1,4 @@
-package com.back.boundedcontext.member.domain;
+package com.back.boundedcontext.post.domain;
 
 import com.back.global.jpa.entity.BaseIdAndTime;
 import jakarta.persistence.Column;
@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
  * @date : 25. 12. 23.
  */
 @Entity
-@Table(name = "MEMBER_MEMBER")
-@Getter
+@Table(name = "POST_MEMBER")
 @NoArgsConstructor
-public class Member extends BaseIdAndTime {
+@Getter
+public class PostMember extends BaseIdAndTime {
 
     @Column(unique = true)
     private String username;
@@ -25,14 +25,4 @@ public class Member extends BaseIdAndTime {
     private String nickname;
 
     private int activityScore;
-
-    public Member(String username, String password, String nickname) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-    }
-
-    public void increaseActivityScore(int amount) {
-        this.activityScore += amount;
-    }
 }
