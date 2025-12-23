@@ -1,9 +1,10 @@
 package com.back.global.initdata;
 
 import com.back.boundedcontext.member.domain.Member;
+import com.back.boundedcontext.post.app.PostFacade;
+import com.back.boundedcontext.post.app.PostWriteUseCase;
 import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.member.app.MemberFacade;
-import com.back.boundedcontext.post.app.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -23,16 +24,16 @@ public class DataInit {
     // 자기 자신의 프록시를 참조하도록 설정
     private final DataInit self;
     private final MemberFacade memberFacade;
-    private final PostService postService;
+    private final PostFacade postFacade;
 
     public DataInit(
             @Lazy DataInit self,
             MemberFacade memberFacade,
-            PostService postService
+            PostFacade postFacade
             ) {
         this.self = self;
         this.memberFacade = memberFacade;
-        this.postService = postService;
+        this.postFacade = postFacade;
     }
 
     @Bean
@@ -65,7 +66,7 @@ public class DataInit {
 
     @Transactional
     public void makeBasePosts() {
-        if (postService.count() > 0) {
+        if (postFacade.count() > 0) {
             return;
         }
 
@@ -73,22 +74,22 @@ public class DataInit {
         Member user2Member = memberFacade.findByUsername("user2").get();
         Member user3Member = memberFacade.findByUsername("user3").get();
 
-        Post post1 = postService.write(user1Member, "제목1", "내용1");
-        Post post2 = postService.write(user1Member, "제목2", "내용2");
-        Post post3 = postService.write(user1Member, "제목3", "내용3");
-        Post post4 = postService.write(user2Member, "제목4", "내용4");
-        Post post5 = postService.write(user2Member, "제목5", "내용5");
-        Post post6 = postService.write(user3Member, "제목6", "내용6");
+        Post post1 = postFacade.write(user1Member, "제목1", "내용1");
+        Post post2 = postFacade.write(user1Member, "제목2", "내용2");
+        Post post3 = postFacade.write(user1Member, "제목3", "내용3");
+        Post post4 = postFacade.write(user2Member, "제목4", "내용4");
+        Post post5 = postFacade.write(user2Member, "제목5", "내용5");
+        Post post6 = postFacade.write(user3Member, "제목6", "내용6");
     }
 
     @Transactional
     public void makeBasePostComments() {
-        Post post1 = postService.findById(1).get();
-        Post post2 = postService.findById(2).get();
-        Post post3 = postService.findById(3).get();
-        Post post4 = postService.findById(4).get();
-        Post post5 = postService.findById(5).get();
-        Post post6 = postService.findById(6).get();
+        Post post1 = postFacade.findById(1).get();
+        Post post2 = postFacade.findById(2).get();
+        Post post3 = postFacade.findById(3).get();
+        Post post4 = postFacade.findById(4).get();
+        Post post5 = postFacade.findById(5).get();
+        Post post6 = postFacade.findById(6).get();
 
         Member user1Member = memberFacade.findByUsername("user1").get();
         Member user2Member = memberFacade.findByUsername("user2").get();
@@ -96,17 +97,17 @@ public class DataInit {
 
         if (post1.hasComments()) return;
 
-        postService.writeComment(post1.getId(), user1Member, "댓글1");
-        postService.writeComment(post1.getId(), user2Member, "댓글2");
-        postService.writeComment(post1.getId(), user3Member, "댓글3");
+        postFacade.writeComment(post1, user1Member, "댓글1");
+        postFacade.writeComment(post1, user2Member, "댓글2");
+        postFacade.writeComment(post1, user3Member, "댓글3");
 
 
-        postService.writeComment(post2.getId(), user2Member, "댓글4");
-        postService.writeComment(post2.getId(), user2Member, "댓글5");
+        postFacade.writeComment(post2, user2Member, "댓글4");
+        postFacade.writeComment(post2, user2Member, "댓글5");
 
-        postService.writeComment(post3.getId(), user3Member, "댓글6");
-        postService.writeComment(post3.getId(), user1Member, "댓글7");
+        postFacade.writeComment(post3, user3Member, "댓글6");
+        postFacade.writeComment(post3, user1Member, "댓글7");
 
-        postService.writeComment(post4.getId(), user1Member, "댓글8");
+        postFacade.writeComment(post4, user1Member, "댓글8");
     }
 }

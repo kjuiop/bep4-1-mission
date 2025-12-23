@@ -13,26 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /**
  * @author : JAKE
  * @date : 25. 12. 23.
  */
 @Service
 @RequiredArgsConstructor
-public class PostService {
+public class PostWriteUseCase {
 
     private final PostRepository postRepository;
     private final EventPublisher eventPublisher;
-
-    public long count() {
-        return postRepository.count();
-    }
-
-    public Optional<Post> findById(long id) {
-        return postRepository.findById(id);
-    }
 
     @Transactional
     public Post write(Member author, String title, String content) {
@@ -46,8 +36,7 @@ public class PostService {
     }
 
     @Transactional
-    public void writeComment(long postId, Member author, String content) {
-        Post post = findById(postId).orElseThrow();
+    public void writeComment(Post post, Member author, String content) {
         PostComment saved = post.addComment(author, content);
         postRepository.save(post);
 
