@@ -1,4 +1,4 @@
-package com.back.boundedcontext.member.in;
+package com.back.boundedcontext.member.in.eventlistener;
 
 import com.back.boundedcontext.member.app.MemberFacade;
 import com.back.boundedcontext.member.domain.Member;
