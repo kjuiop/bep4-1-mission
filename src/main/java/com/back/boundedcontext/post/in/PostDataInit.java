@@ -1,7 +1,6 @@
-package com.back.global.initdata;
+package com.back.boundedcontext.post.in;
 
 import com.back.boundedcontext.member.app.MemberFacade;
-import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.post.app.PostFacade;
 import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostMember;
@@ -11,6 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -19,50 +19,34 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Configuration
 @Slf4j
-public class DataInit {
+public class PostDataInit {
 
     // Self-Injection 패턴 : 같은 클래스 내에서 트랜잭션 메서드를 호출할 수 있도록 하는 패턴
     // 자기 자신의 프록시를 참조하도록 설정
-    private final DataInit self;
-    private final MemberFacade memberFacade;
+    private final PostDataInit self;
     private final PostFacade postFacade;
 
-    public DataInit(
-            @Lazy DataInit self,
+    public PostDataInit(
+            @Lazy PostDataInit self,
             MemberFacade memberFacade,
             PostFacade postFacade
             ) {
         this.self = self;
-        this.memberFacade = memberFacade;
         this.postFacade = postFacade;
     }
 
     @Bean
-    public ApplicationRunner baseInitDataRunner() {
+    @Order(2)
+    public ApplicationRunner postDataInitApplicationRunner() {
         return args -> {
             // 자기 자신을 의존성을 주입 (DI) 해서 함수를 호출함으로 SpringContext 프록시를 적용한 후에 함수를 수행할 수 있음
             // 따라서 @Transactional 어노테이션이 적용된 후에 함수가 동작함으로 기능도 정상 동작을 함
-            self.makeBaseMembers();
             self.makeBasePosts();
             self.makeBasePostComments();
             // 아래와 같은 방식은 클래스 내에서 자신의 메서드를 직접 호출함으로 proxy 가 개입할 여지가 없음
             // 따라서 @Transactional 어노테이션도 적용되지 않음
             // this.makeBaseMembers();
         };
-    }
-
-    @Transactional
-    public void makeBaseMembers() {
-        if (memberFacade.count() > 0) {
-            return;
-        }
-
-        Member systemMember = memberFacade.join("system", "1234", "시스템").getData();
-        Member holdingMember = memberFacade.join("holding", "1234", "홀딩").getData();
-        Member adminMember = memberFacade.join("admin", "1234", "관리자").getData();
-        Member user1Member = memberFacade.join("user1", "1234", "유저1").getData();
-        Member user2Member = memberFacade.join("user2", "1234", "유저2").getData();
-        Member user3Member = memberFacade.join("user3", "1234", "유저3").getData();
     }
 
     @Transactional
