@@ -28,18 +28,18 @@ public class Post extends BaseIdAndTime {
     private String content;
 
     @ManyToOne
-    private Member author;
+    private PostMember author;
 
     @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<PostComment> comments = new ArrayList<>();
 
-    public Post(Member author, String title, String content) {
+    public Post(PostMember author, String title, String content) {
         this.author = author;
         this.title = title;
         this.content = content;
     }
 
-    public PostComment addComment(Member author, String content) {
+    public PostComment addComment(PostMember author, String content) {
         PostComment comment = new PostComment(this, author, content);
         comments.add(comment);
         return comment;

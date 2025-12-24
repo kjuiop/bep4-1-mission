@@ -5,6 +5,7 @@ import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.member.out.apiclient.MemberApiClient;
 import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostComment;
+import com.back.boundedcontext.post.domain.PostMember;
 import com.back.boundedcontext.post.out.PostRepository;
 import com.back.global.eventpublisher.EventPublisher;
 import com.back.global.rsdata.RsData;
@@ -29,7 +30,7 @@ public class PostWriteUseCase {
     private final MemberApiClient memberApiClient;
 
     @Transactional
-    public RsData<Post> write(Member author, String title, String content) {
+    public RsData<Post> write(PostMember author, String title, String content) {
         Post post = new Post(author, title, content);
         Post saved = postRepository.save(post);
 
@@ -40,7 +41,7 @@ public class PostWriteUseCase {
     }
 
     @Transactional
-    public RsData<PostComment> writeComment(Post post, Member author, String content) {
+    public RsData<PostComment> writeComment(Post post, PostMember author, String content) {
         PostComment comment = post.addComment(author, content);
         postRepository.save(post);
 
