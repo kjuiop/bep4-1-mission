@@ -3,9 +3,12 @@ package com.back.boundedcontext.post.out;
 import com.back.boundedcontext.post.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * @author : JAKE
  * @date : 25. 12. 23.
  */
 public interface PostRepository extends JpaRepository<Post, Long> {
+    List<Post> findByOrderByIdDesc();
 }
