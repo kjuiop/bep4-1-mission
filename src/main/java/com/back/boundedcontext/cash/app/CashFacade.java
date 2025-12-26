@@ -1,7 +1,9 @@
 package com.back.boundedcontext.cash.app;
 
 import com.back.boundedcontext.cash.domain.CashMember;
+import com.back.boundedcontext.cash.domain.Wallet;
 import com.back.boundedcontext.cash.out.CashMemberRepository;
+import com.back.boundedcontext.cash.out.WalletRepository;
 import com.back.shared.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CashFacade {
 
     private final CashMemberRepository cashMemberRepository;
+    private final WalletRepository walletRepository;
 
     @Transactional
     public CashMember syncMember(MemberDto member) {
@@ -30,5 +33,11 @@ public class CashFacade {
         );
 
         return cashMemberRepository.save(_member);
+    }
+
+    @Transactional
+    public Wallet createWallet(CashMember holder) {
+        Wallet wallet = new Wallet(holder);
+        return walletRepository.save(wallet);
     }
 }
