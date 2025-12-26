@@ -30,16 +30,7 @@ public class MemberFacade {
 
     @Transactional
     public RsData<Member> join(String username, String password, String nickname) {
-        findByUsername(username).ifPresent(member -> {
-            throw new DomainException("409-1", "이미 존재하는 username 입니다.");
-        });
-
         return memberJoinUseCase.join(username, password, nickname);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
     }
 
     @Transactional(readOnly = true)

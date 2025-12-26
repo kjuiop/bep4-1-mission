@@ -1,7 +1,5 @@
 package com.back.boundedcontext.post.app;
 
-import com.back.boundedcontext.member.app.MemberFacade;
-import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.member.out.apiclient.MemberApiClient;
 import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostComment;

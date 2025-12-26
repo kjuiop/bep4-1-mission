@@ -10,11 +10,11 @@ import org.springframework.web.client.RestClient;
 @Service
 public class MemberApiClient {
 
-    private static final RestClient restClient = RestClient.builder()
+    private final RestClient restClient = RestClient.builder()
             .baseUrl("http://localhost:8080/api/v1/members")
             .build();
 
-    public static String getRandomSecureTip() {
+    public String getRandomSecureTip() {
         return restClient.get()
                 .uri("/random-secure-tip")
                 .retrieve()
