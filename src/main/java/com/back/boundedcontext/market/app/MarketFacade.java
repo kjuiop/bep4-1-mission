@@ -1,7 +1,10 @@
 package com.back.boundedcontext.market.app;
 
+import com.back.boundedcontext.market.domain.Cart;
 import com.back.boundedcontext.market.domain.MarketMember;
 import com.back.boundedcontext.market.domain.Product;
+import com.back.global.rsdata.RsData;
+import com.back.shared.member.dto.MarketMemberDto;
 import com.back.shared.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class MarketFacade {
     private final MarketSupport marketSupport;
     private final MarketSyncMemberUseCase marketSyncMemberUseCase;
     private final MarketCreateProductUseCase marketCreateProductUseCase;
+    private final MarketCreateCartUseCase marketCreateCartUseCase;
 
     @Transactional
     public MarketMember syncMember(MemberDto member) {
@@ -50,6 +54,11 @@ public class MarketFacade {
                 price,
                 salePrice
         );
+    }
+
+    @Transactional
+    public RsData<Cart> createCart(MarketMemberDto customer) {
+        return marketCreateCartUseCase.createCart(customer);
     }
 
     @Transactional(readOnly = true)
