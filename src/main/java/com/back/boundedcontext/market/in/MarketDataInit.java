@@ -3,6 +3,7 @@ package com.back.boundedcontext.market.in;
 import com.back.boundedcontext.market.app.MarketFacade;
 import com.back.boundedcontext.market.domain.Cart;
 import com.back.boundedcontext.market.domain.MarketMember;
+import com.back.boundedcontext.market.domain.Order;
 import com.back.boundedcontext.market.domain.Product;
 import com.back.shared.post.dto.PostDto;
 import com.back.shared.post.out.PostApiClient;
@@ -11,7 +12,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -37,11 +37,12 @@ public class MarketDataInit {
     }
 
     @Bean
-    @Order(3)
+    @org.springframework.core.annotation.Order(3)
     public ApplicationRunner marketDataInitApplicationRunnner() {
         return args -> {
             self.makeBaseProducts();
             self.makeBaseCartItems();
+            self.makeBaseOrders();
         };
     }
 
@@ -155,5 +156,21 @@ public class MarketDataInit {
 
         cart3.addItem(product1);
         cart3.addItem(product2);
+    }
+
+    @Transactional
+    public void makeBaseOrders() {
+        if (marketFacade.ordersCount() > 0) {
+            return;
+        }
+
+        MarketMember user2Member = marketFacade.findMemberByUsername("user2").get();
+        MarketMember user3Member = marketFacade.findMemberByUsername("user3").get();
+
+        Cart cart2 = marketFacade.findCartByCustomer(user2Member).get();
+        Cart cart3 = marketFacade.findCartByCustomer(user3Member).get();
+
+        Order order1 = marketFacade.createOrder(cart2).getData();
+        Order order2 = marketFacade.createOrder(cart3).getData();
     }
 }
