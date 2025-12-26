@@ -2,10 +2,7 @@ package com.back.boundedcontext.post.domain;
 
 import com.back.boundedcontext.member.domain.Member;
 import com.back.global.jpa.entity.BaseIdAndTime;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,13 +18,15 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class PostComment extends BaseIdAndTime {
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
     private PostMember author;
 
     public PostComment(Post post, PostMember author, String content) {

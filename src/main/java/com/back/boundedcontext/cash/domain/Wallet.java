@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.CascadeType.*;
 
 /**
  * @author : JAKE
@@ -24,7 +23,7 @@ public class Wallet extends BaseManualIdAndTime {
     @Getter
     private long balance;
 
-    @OneToMany(mappedBy = "wallet", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "wallet", cascade = {PERSIST, MERGE, REMOVE}, orphanRemoval = true)
     private List<CashLog> cashLogs = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

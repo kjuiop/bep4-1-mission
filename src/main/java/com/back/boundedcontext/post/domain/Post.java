@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.CascadeType.*;
 
 /**
  * @author : JAKE
@@ -30,7 +29,7 @@ public class Post extends BaseIdAndTime {
     @ManyToOne
     private PostMember author;
 
-    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, MERGE, REMOVE}, orphanRemoval = true)
     private List<PostComment> comments = new ArrayList<>();
 
     public Post(PostMember author, String title, String content) {

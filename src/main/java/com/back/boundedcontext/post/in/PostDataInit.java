@@ -1,8 +1,8 @@
 package com.back.boundedcontext.post.in;
 
-import com.back.boundedcontext.member.app.MemberFacade;
 import com.back.boundedcontext.post.app.PostFacade;
 import com.back.boundedcontext.post.domain.Post;
+import com.back.boundedcontext.post.domain.PostComment;
 import com.back.boundedcontext.post.domain.PostMember;
 import com.back.global.rsdata.RsData;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,6 @@ public class PostDataInit {
 
     public PostDataInit(
             @Lazy PostDataInit self,
-            MemberFacade memberFacade,
             PostFacade postFacade
             ) {
         this.self = self;
@@ -55,9 +54,9 @@ public class PostDataInit {
             return;
         }
 
-        PostMember user1Member = postFacade.findPostMemberByUsername("user1").get();
-        PostMember user2Member = postFacade.findPostMemberByUsername("user2").get();
-        PostMember user3Member = postFacade.findPostMemberByUsername("user3").get();
+        PostMember user1Member = postFacade.findMemberByUsername("user1").get();
+        PostMember user2Member = postFacade.findMemberByUsername("user2").get();
+        PostMember user3Member = postFacade.findMemberByUsername("user3").get();
 
         RsData<Post> post1 = postFacade.write(user1Member, "제목1", "내용1");
         log.debug(post1.getMsg());
@@ -82,23 +81,31 @@ public class PostDataInit {
         Post post5 = postFacade.findById(5).get();
         Post post6 = postFacade.findById(6).get();
 
-        PostMember user1Member = postFacade.findPostMemberByUsername("user1").get();
-        PostMember user2Member = postFacade.findPostMemberByUsername("user2").get();
-        PostMember user3Member = postFacade.findPostMemberByUsername("user3").get();
+        PostMember user1Member = postFacade.findMemberByUsername("user1").get();
+        PostMember user2Member = postFacade.findMemberByUsername("user2").get();
+        PostMember user3Member = postFacade.findMemberByUsername("user3").get();
 
         if (post1.hasComments()) return;
 
-        postFacade.writeComment(post1, user1Member, "댓글1");
-        postFacade.writeComment(post1, user2Member, "댓글2");
-        postFacade.writeComment(post1, user3Member, "댓글3");
+        RsData<PostComment> comment1 = postFacade.writeComment(post1, user1Member, "댓글1");
+        log.debug(comment1.getMsg());
+        RsData<PostComment> comment2 = postFacade.writeComment(post1, user2Member, "댓글2");
+        log.debug(comment2.getMsg());
+        RsData<PostComment> comment3 = postFacade.writeComment(post1, user3Member, "댓글3");
+        log.debug(comment3.getMsg());
 
+        RsData<PostComment> comment4 = postFacade.writeComment(post2, user2Member, "댓글4");
+        log.debug(comment4.getMsg());
+        RsData<PostComment> comment5 = postFacade.writeComment(post2, user2Member, "댓글5");
+        log.debug(comment5.getMsg());
 
-        postFacade.writeComment(post2, user2Member, "댓글4");
-        postFacade.writeComment(post2, user2Member, "댓글5");
+        RsData<PostComment> comment6 = postFacade.writeComment(post3, user3Member, "댓글6");
+        log.debug(comment6.getMsg());
 
-        postFacade.writeComment(post3, user3Member, "댓글6");
-        postFacade.writeComment(post3, user1Member, "댓글7");
+        RsData<PostComment> comment7 = postFacade.writeComment(post3, user1Member, "댓글7");
+        log.debug(comment7.getMsg());
 
-        postFacade.writeComment(post4, user1Member, "댓글8");
+        RsData<PostComment> comment8 = postFacade.writeComment(post4, user1Member, "댓글8");
+        log.debug(comment8.getMsg());
     }
 }
