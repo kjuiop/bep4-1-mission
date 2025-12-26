@@ -65,4 +65,14 @@ public class MarketFacade {
     public Optional<MarketMember> findMemberByUsername(String username) {
         return marketSupport.findMemberByUsername(username);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Cart> findCartByCustomer(MarketMember customer) {
+        return marketSupport.findCartByCustomer(customer);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Product> findProductById(long id) {
+        return marketSupport.findProductById(id);
+    }
 }
