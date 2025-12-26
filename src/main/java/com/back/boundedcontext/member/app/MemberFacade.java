@@ -2,7 +2,6 @@ package com.back.boundedcontext.member.app;
 
 import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.member.domain.MemberPolicy;
-import com.back.global.exception.DomainException;
 import com.back.boundedcontext.member.out.repository.MemberRepository;
 import com.back.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
