@@ -1,6 +1,8 @@
 package com.back.boundedcontext.market.domain;
 
 import com.back.global.jpa.entity.BaseIdAndTime;
+import com.back.shared.market.dto.OrderDto;
+import com.back.shared.market.event.MarketOrderRequestPaymentStartedEvent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -71,6 +73,29 @@ public class Order extends BaseIdAndTime {
 
     public boolean isPaid() {
         return paymentDate != null;
+    }
+
+    public void requestPayment(long pgPaymentAmount) {
+        markAsRequestPaymentStarted();
+
+        publishEvent(
+                new MarketOrderRequestPaymentStartedEvent(
+                        new OrderDto(this),
+                        pgPaymentAmount
+                )
+        );
+    }
+
+    private void markAsRequestPaymentStarted() {
+        requestPaymentDate = LocalDateTime.now();
+    }
+
+    public void cancelRequestPayment() {
+        cancelDate = LocalDateTime.now();
+    }
+
+    public void refund() {
+        requestPaymentDate = null;
     }
 }
 

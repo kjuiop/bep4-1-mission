@@ -1,6 +1,7 @@
 package com.back.boundedcontext.cash.in;
 
 import com.back.boundedcontext.cash.app.CashFacade;
+import com.back.shared.market.event.MarketOrderRequestPaymentStartedEvent;
 import com.back.shared.member.event.CashMemberCreatedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
@@ -37,5 +38,11 @@ public class CashEventListener {
     @Transactional(propagation = REQUIRES_NEW)
     public void handle(CashMemberCreatedEvent event) {
         cashFacade.createWallet(event.getMember());
+    }
+
+    @TransactionalEventListener(phase = AFTER_COMMIT)
+    @Transactional(propagation = REQUIRES_NEW)
+    public void handle(MarketOrderRequestPaymentStartedEvent event) {
+        cashFacade.handle(event);
     }
 }

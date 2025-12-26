@@ -7,6 +7,8 @@ import com.back.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author : JAKE
  * @date : 25. 12. 26.
@@ -27,5 +29,9 @@ public class MarketCreateOrderUseCase {
                 "%d번 주문이 생성되었습니다.".formatted(order.getId()),
                 order
         );
+    }
+
+    public Optional<Order> findOrderById(long id) {
+        return orderRepository.findById(id);
     }
 }
