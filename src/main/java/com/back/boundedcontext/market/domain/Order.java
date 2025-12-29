@@ -88,7 +88,7 @@ public class Order extends BaseIdAndTime {
 
         publishEvent(
                 new MarketOrderRequestPaymentStartedEvent(
-                        new OrderDto(this),
+                        toDto(),
                         pgPaymentAmount
                 )
         );
@@ -104,6 +104,22 @@ public class Order extends BaseIdAndTime {
 
     public void refund() {
         requestPaymentDate = null;
+    }
+
+    public OrderDto toDto() {
+        return new OrderDto(
+                getId(),
+                getCreateDate(),
+                getModifyDate(),
+                customer.getId(),
+                customer.getNickname(),
+                price,
+                salePrice,
+                requestPaymentDate,
+                paymentDate,
+                cancelDate,
+                refundDate
+        );
     }
 }
 

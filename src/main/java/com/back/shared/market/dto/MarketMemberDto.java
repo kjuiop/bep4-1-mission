@@ -1,4 +1,4 @@
-package com.back.shared.post.dto;
+package com.back.shared.market.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,17 +7,16 @@ import java.time.LocalDateTime;
 
 /**
  * @author : JAKE
- * @date : 25. 12. 23.
+ * @date : 25. 12. 29.
  */
 @AllArgsConstructor
 @Getter
-public class PostCommentDto {
+public class MarketMemberDto {
 
     private final long id;
     private final LocalDateTime createDate;
     private final LocalDateTime modifyDate;
-    private final long postId;
-    private final long authorId;
-    private final String authorName;
-    private final String content;
+    private final String username;
+    private final String nickname;
+    private final int activityScore;
 }

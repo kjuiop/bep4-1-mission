@@ -1,6 +1,7 @@
 package com.back.boundedcontext.post.in.api.v1;
 
 import com.back.boundedcontext.post.app.PostFacade;
+import com.back.boundedcontext.post.domain.Post;
 import com.back.shared.post.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class PostController {
     public PostDto getItem(@PathVariable Long id) {
         return postFacade
                 .findById(id)
-                .map(PostDto::new)
+                .map(Post::toDto)
                 .get();
     }
 }

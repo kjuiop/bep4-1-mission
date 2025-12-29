@@ -1,6 +1,7 @@
 package com.back.boundedcontext.cash.in.api.v1;
 
 import com.back.boundedcontext.cash.app.CashFacade;
+import com.back.boundedcontext.cash.domain.Wallet;
 import com.back.shared.cash.dto.WalletDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class CashController {
     public WalletDto getItemByHolder(@PathVariable long holderId) {
         return cashFacade
                 .findWalletByHolderId(holderId)
-                .map(WalletDto::new)
+                .map(Wallet::toDto)
                 .get();
     }
 }

@@ -2,6 +2,7 @@ package com.back.boundedcontext.post.domain;
 
 import com.back.boundedcontext.member.domain.Member;
 import com.back.global.jpa.entity.BaseIdAndTime;
+import com.back.shared.post.dto.PostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,5 +47,17 @@ public class Post extends BaseIdAndTime {
 
     public boolean hasComments() {
         return !comments.isEmpty();
+    }
+
+    public PostDto toDto() {
+        return new PostDto(
+                getId(),
+                getCreateDate(),
+                getModifyDate(),
+                author.getId(),
+                author.getNickname(),
+                title,
+                content
+        );
     }
 }

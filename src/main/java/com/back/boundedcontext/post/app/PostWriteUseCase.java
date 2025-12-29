@@ -33,7 +33,7 @@ public class PostWriteUseCase {
         Post saved = postRepository.save(post);
 
         eventPublisher.publish(
-                new PostCreatedEvent(new PostDto(saved))
+                new PostCreatedEvent(saved.toDto())
         );
         return new RsData<>("201-1", "%d번 글이 생성되었습니다.".formatted(post.getId()), post);
     }
@@ -44,7 +44,7 @@ public class PostWriteUseCase {
         postRepository.save(post);
 
         eventPublisher.publish(
-                new PostCommentCreatedEvent(new PostCommentDto(comment))
+                new PostCommentCreatedEvent(comment.toDto())
         );
 
         String randomSecureTip = memberApiClient.getRandomSecureTip();
