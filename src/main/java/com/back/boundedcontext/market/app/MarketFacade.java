@@ -109,7 +109,8 @@ public class MarketFacade {
 
     @Transactional
     public void handle(CashOrderPaymentFailedEvent event) {
-        marketCancelOrderRequestPaymentUseCase.handle(event);
+        long orderId = event.getOrder().getId();
+        marketCancelOrderRequestPaymentUseCase.cancelRequestPayment(orderId);
     }
 
 

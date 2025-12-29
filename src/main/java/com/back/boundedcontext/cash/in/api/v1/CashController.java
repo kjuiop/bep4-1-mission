@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @date : 25. 12. 26.
  */
 @RestController
-@RequestMapping("/cash/api/v1/cash")
+@RequestMapping("/api/v1/cash")
 @RequiredArgsConstructor
-public class WalletController {
+public class CashController {
 
     private final CashFacade cashFacade;
 
