@@ -31,6 +31,7 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 custom:
-  toss:
-    payments:
-      secretKey: ${TOSS_PAYMENTS_SECRET_KEY:}
+  market:
+    toss:
+      payments:
+        secretKey: ${TOSS_PAYMENTS_SECRET_KEY:}

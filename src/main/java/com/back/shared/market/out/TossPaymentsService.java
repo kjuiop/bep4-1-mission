@@ -26,7 +26,7 @@ public class TossPaymentsService {
     private final RestClient tossRestClient;
     private final ObjectMapper objectMapper;
 
-    @Value("${custom.toss.payments.secretKey:}")
+    @Value("${custom.market.toss.payments.secretKey:}")
     private String tossSecretKey;
 
     public TossPaymentsService(ObjectMapper objectMapper) {
@@ -36,7 +36,12 @@ public class TossPaymentsService {
                 .build();
     }
 
-    public Map<String, Object> confirmCardPayment(TossPaymentsConfirmRequest requestBody) {
+    public Map<String, Object> confirmCardPayment(String paymentKey, String orderId, long amount) {
+
+        TossPaymentsConfirmRequest requestBody = new TossPaymentsConfirmRequest(
+                paymentKey, orderId, amount
+        );
+
         try {
             ResponseEntity<Map> responseEntity = createConfirmRequest(requestBody)
                     .retrieve()

@@ -70,11 +70,7 @@ public class OrderController {
         }
 
         tossPaymentsService.confirmCardPayment(
-                new TossPaymentsService.TossPaymentsConfirmRequest(
-                        reqBody.paymentKey(),
-                        reqBody.orderId(),
-                        reqBody.amount()
-                )
+                reqBody.paymentKey, reqBody.orderId, reqBody.amount
         );
 
         marketFacade.requestPayment(order, reqBody.amount());

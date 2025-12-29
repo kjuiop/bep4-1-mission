@@ -1,9 +1,9 @@
 package com.back.shared.cash.dto;
 
 import com.back.boundedcontext.cash.domain.Wallet;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
  * @author : JAKE
  * @date : 25. 12. 26.
  */
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(
+        onConstructor_ = @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+)
 @Getter
 public class WalletDto {
     private long id;
