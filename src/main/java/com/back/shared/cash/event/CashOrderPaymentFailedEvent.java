@@ -1,6 +1,7 @@
 package com.back.shared.cash.event;
 
 import com.back.shared.market.dto.OrderDto;
+import com.back.standard.resulttype.ResultType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class CashOrderPaymentFailedEvent {
+public class CashOrderPaymentFailedEvent implements ResultType {
 
     private final String resultCode;
     private final String msg;

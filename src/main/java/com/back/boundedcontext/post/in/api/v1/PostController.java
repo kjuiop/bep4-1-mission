@@ -29,7 +29,7 @@ public class PostController {
         return postFacade
                 .findByOrderByIdDesc()
                 .stream()
-                .map(PostDto::new)
+                .map(Post::toDto)
                 .toList();
     }
 

@@ -67,7 +67,7 @@ public class MarketDataInit {
         MarketMember user3MarketMember = marketFacade.findMemberByUsername("user3").get();
 
         Product product1 = marketFacade.createProduct(
-                "Post",
+                post1.getModelTypeCode(),
                 post1.getId(),
                 post1.getTitle(),
                 post1.getContent(),
@@ -77,7 +77,7 @@ public class MarketDataInit {
         );
 
         Product product2 = marketFacade.createProduct(
-                "Post",
+                post2.getModelTypeCode(),
                 post2.getId(),
                 post2.getTitle(),
                 post2.getContent(),
@@ -87,7 +87,7 @@ public class MarketDataInit {
         );
 
         Product product3 = marketFacade.createProduct(
-                "Post",
+                post3.getModelTypeCode(),
                 post3.getId(),
                 post3.getTitle(),
                 post3.getContent(),
@@ -97,7 +97,7 @@ public class MarketDataInit {
         );
 
         Product product4 = marketFacade.createProduct(
-                "Post",
+                post4.getModelTypeCode(),
                 post4.getId(),
                 post4.getTitle(),
                 post4.getContent(),
@@ -107,7 +107,7 @@ public class MarketDataInit {
         );
 
         Product product5 = marketFacade.createProduct(
-                "Post",
+                post5.getModelTypeCode(),
                 post5.getId(),
                 post5.getTitle(),
                 post5.getContent(),
@@ -117,7 +117,7 @@ public class MarketDataInit {
         );
 
         Product product6 = marketFacade.createProduct(
-                "Post",
+                post6.getModelTypeCode(),
                 post6.getId(),
                 post6.getTitle(),
                 post6.getContent(),
