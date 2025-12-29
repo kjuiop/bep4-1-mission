@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @date : 25. 12. 26.
  */
 @RestController
-@RequestMapping("/cash/api/v1/wallets")
+@RequestMapping("/cash/api/v1/cash")
 @RequiredArgsConstructor
 public class WalletController {
 
     private final CashFacade cashFacade;
 
-    @GetMapping("/by-holder/{holderId}")
+    @GetMapping("/wallets/by-holder/{holderId}")
     @Transactional(readOnly = true)
     public WalletDto getItemByHolder(@PathVariable long holderId) {
         return cashFacade

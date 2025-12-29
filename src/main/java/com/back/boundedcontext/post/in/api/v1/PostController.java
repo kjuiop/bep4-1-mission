@@ -16,7 +16,7 @@ import java.util.List;
  * @date : 25. 12. 26.
  */
 @RestController
-@RequestMapping("/post/api/v1/posts")
+@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
 

@@ -4,7 +4,7 @@ import com.back.boundedcontext.market.app.MarketFacade;
 import com.back.boundedcontext.market.domain.Order;
 import com.back.global.exception.DomainException;
 import com.back.global.rsdata.RsData;
-import com.back.shared.cash.out.WalletApiClient;
+import com.back.shared.cash.out.CashApiClient;
 import com.back.shared.market.out.TossPaymentsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +24,7 @@ public class OrderController {
 
     private final MarketFacade marketFacade;
     private final TossPaymentsService tossPaymentsService;
-    private final WalletApiClient walletApiClient;
+    private final CashApiClient cashApiClient;
 
     public record ConfirmPaymentByTossPaymentsReqBody(
             @NotBlank String paymentKey,
@@ -59,7 +59,7 @@ public class OrderController {
             throw new DomainException("400-3", "이미 결제된 주문입니다.");
         }
 
-        long walletBalance = walletApiClient.getBalanceByHolderId(order.getCustomer().getId());
+        long walletBalance = cashApiClient.getBalanceByHolderId(order.getCustomer().getId());
 
         if (order.getSalePrice() > walletBalance + reqBody.amount) {
             throw new DomainException("400-4", "결제를 완료하기에 결제 금액이 부족합니다.");

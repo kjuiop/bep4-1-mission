@@ -31,7 +31,7 @@ public class OrderItem extends BaseIdAndTime {
 
     private int salePrice;
 
-    private int payoutRate = MarketPolicy.PRODUCT_PAYOUT_RATE;
+    private double payoutRate = MarketPolicy.PRODUCT_PAYOUT_RATE;
 
     public OrderItem(Order order, Product product, String productName, int price, int salePrice) {
         this.order = order;

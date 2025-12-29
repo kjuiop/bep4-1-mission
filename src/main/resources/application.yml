@@ -31,7 +31,14 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 custom:
+  global:
+    internalBackUrl: http://localhost:${server.port:8080}
+  member:
+    password:
+      changeDays: 90
   market:
+    product:
+      payoutRate: 90
     toss:
       payments:
         secretKey: ${TOSS_PAYMENTS_SECRET_KEY:}
