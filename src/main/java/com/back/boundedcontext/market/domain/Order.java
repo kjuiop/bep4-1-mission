@@ -75,6 +75,14 @@ public class Order extends BaseIdAndTime {
         return paymentDate != null;
     }
 
+    public boolean isCanceled() {
+        return cancelDate != null;
+    }
+
+    public boolean isPaymentInProgress() {
+        return requestPaymentDate != null && paymentDate == null && cancelDate == null;
+    }
+
     public void requestPayment(long pgPaymentAmount) {
         markAsRequestPaymentStarted();
 

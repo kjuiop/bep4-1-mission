@@ -47,4 +47,9 @@ public class CashFacade {
     public Optional<Wallet> findWalletByHolder(CashMember holder) {
         return cashSupport.findWalletByHolder(holder);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Wallet> findWalletByHolderId(long holderId) {
+        return cashSupport.findWalletByHolderId(holderId);
+    }
 }
