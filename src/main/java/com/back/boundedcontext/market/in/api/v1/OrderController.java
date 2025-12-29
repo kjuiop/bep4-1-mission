@@ -2,9 +2,11 @@ package com.back.boundedcontext.market.in.api.v1;
 
 import com.back.boundedcontext.market.app.MarketFacade;
 import com.back.boundedcontext.market.domain.Order;
+import com.back.boundedcontext.market.domain.OrderItem;
 import com.back.global.exception.DomainException;
 import com.back.global.rsdata.RsData;
 import com.back.shared.cash.out.CashApiClient;
+import com.back.shared.market.dto.OrderItemDto;
 import com.back.shared.market.out.TossPaymentsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +14,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author : JAKE
@@ -59,7 +63,7 @@ public class OrderController {
             throw new DomainException("400-3", "이미 결제된 주문입니다.");
         }
 
-        long walletBalance = cashApiClient.getBalanceByHolderId(order.getCustomer().getId());
+        long walletBalance = cashApiClient.getBalanceByHolderId(order.getBuyer().getId());
 
         if (order.getSalePrice() > walletBalance + reqBody.amount) {
             throw new DomainException("400-4", "결제를 완료하기에 결제 금액이 부족합니다.");
@@ -77,4 +81,15 @@ public class OrderController {
         return new RsData<>("202-1", "결제 프로세스가 시작되었습니다.");
     }
 
+    @GetMapping("/{id}/items")
+    @Transactional(readOnly = true)
+    public List<OrderItemDto> getItems(@PathVariable long id) {
+        return marketFacade
+                .findOrderById(id)
+                .get()
+                .getItems()
+                .stream()
+                .map(OrderItem::toDto)
+                .toList();
+    }
 }

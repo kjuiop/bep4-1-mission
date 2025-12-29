@@ -29,7 +29,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class Order extends BaseIdAndTime {
 
     @ManyToOne(fetch = LAZY)
-    private MarketMember customer;
+    private MarketMember buyer;
 
     private LocalDateTime requestPaymentDate;
 
@@ -47,7 +47,7 @@ public class Order extends BaseIdAndTime {
     private List<OrderItem> items = new ArrayList<>();
 
     public Order(Cart cart) {
-        this.customer = cart.getCustomer();
+        this.buyer = cart.getCustomer();
 
         cart.getItems().forEach(item -> {
             addItem(item.getProduct());
@@ -118,8 +118,8 @@ public class Order extends BaseIdAndTime {
                 getId(),
                 getCreateDate(),
                 getModifyDate(),
-                customer.getId(),
-                customer.getNickname(),
+                buyer.getId(),
+                buyer.getNickname(),
                 price,
                 salePrice,
                 requestPaymentDate,
