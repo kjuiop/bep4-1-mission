@@ -21,12 +21,12 @@ public class PayoutSupport {
     private final PayoutMemberRepository payoutMemberRepository;
     private final PayoutCandidateItemRepository payoutCandidateItemRepository;
 
-    public Optional<PayoutMember> findHoldingMember() {
-        return payoutMemberRepository.findByUsername("holding");
-    }
-
     public Optional<PayoutMember> findMemberById(long id) {
         return payoutMemberRepository.findById(id);
+    }
+
+    public Optional<PayoutMember> findSystemMember() {
+        return payoutMemberRepository.findByUsername("system");
     }
 
     public List<PayoutCandidateItem> findPayoutCandidateItems() {
