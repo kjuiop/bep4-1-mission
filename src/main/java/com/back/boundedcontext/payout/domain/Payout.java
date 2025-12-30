@@ -22,6 +22,7 @@ import static jakarta.persistence.FetchType.LAZY;
  * @author : JAKE
  * @date : 25. 12. 29.
  */
+// 회원별 정산 금액
 @Entity
 @Table(name = "PAYOUT_PAYOUT")
 @NoArgsConstructor

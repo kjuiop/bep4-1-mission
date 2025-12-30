@@ -21,7 +21,7 @@ public class CashCompleteOrderPaymentUseCase {
     private final EventPublisher eventPublisher;
 
     public void completeOrderPayment(OrderDto order, long pgPaymentAmount) {
-        Wallet customerWallet = cashSupport.findWalletByHolderId(order.getCustomerId()).get();
+        Wallet customerWallet = cashSupport.findWalletByHolderId(order.getBuyerId()).get();
         Wallet holdingWallet = cashSupport.findHoldingWallet().get();
 
         if (pgPaymentAmount > 0) {

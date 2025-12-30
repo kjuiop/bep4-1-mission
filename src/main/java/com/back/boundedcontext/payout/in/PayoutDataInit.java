@@ -55,8 +55,8 @@ public class PayoutDataInit {
         return args -> {
             self.forceMakePayoutReadyCandidatesItems();
             self.collectPayoutItemsMore();
-            self.runCollectPayoutItemsAndCompletePayoutsBatchJob();
             self.completePayoutsMore();
+//            self.runCollectPayoutItemsAndCompletePayoutsBatchJob();
         };
     }
 
@@ -73,26 +73,27 @@ public class PayoutDataInit {
 
     @Transactional
     public void collectPayoutItemsMore() {
-        payoutFacade.collectPayoutItemsMore(2);
+        payoutFacade.collectPayoutItemsMore(6);
     }
 
     @Transactional
     public void completePayoutsMore() {
-        payoutFacade.completePayoutsMore(1);
+        payoutFacade.completePayoutsMore(6);
     }
 
     public void runCollectPayoutItemsAndCompletePayoutsBatchJob() {
+        String runDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString(
-                        "runDate",
-                        LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+                        "runDate", runDate
                 )
                 .toJobParameters();
 
         try {
             JobExecution execution = jobOperator.start(payoutCollectItemsAndCompletePayoutsJob, jobParameters);
         } catch (JobInstanceAlreadyCompleteException e) {
-            log.error("Job instance already complete", e);
+            log.error("Job instance already complete for today {}", runDate, e);
         } catch (JobExecutionAlreadyRunningException e) {
             log.error("Job execution already running", e);
         } catch (InvalidJobParametersException e) {

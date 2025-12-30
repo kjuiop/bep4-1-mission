@@ -16,8 +16,8 @@ public class OrderDto implements CanGetModelTypeCode {
     private long id;
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
-    private long customerId;
-    private String customerName;
+    private long buyerId;
+    private String buyerName;
     private int price;
     private int salePrice;
     private LocalDateTime requestPaymentDate;
