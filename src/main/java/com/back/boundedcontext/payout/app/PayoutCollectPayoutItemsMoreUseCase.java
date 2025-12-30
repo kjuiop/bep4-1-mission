@@ -5,8 +5,10 @@ import com.back.boundedcontext.payout.out.PayoutCandidateItemRepository;
 import com.back.boundedcontext.payout.out.PayoutRepository;
 import com.back.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,12 +19,12 @@ import java.util.stream.Collectors;
  * @author : JAKE
  * @date : 25. 12. 29.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PayoutCollectPayoutItemsMoreUseCase {
 
     private final PayoutRepository payoutRepository;
-    private final PayoutAddPayoutCandidateItemsUseCase payoutAddPayoutCandidateItemsUseCase;
     private final PayoutCandidateItemRepository payoutCandidateItemRepository;
 
     public RsData<Integer> collectPayoutItemsMore(int limit) {
@@ -35,6 +37,7 @@ public class PayoutCollectPayoutItemsMoreUseCase {
         payoutReadyCandidateItems.stream()
                 .collect(Collectors.groupingBy(PayoutCandidateItem::getPayee))
                 .forEach((payee, candidateItems) -> {
+
                     Payout payout = findActiveByPayee(payee).get();
 
                     candidateItems.forEach(item -> {
@@ -51,7 +54,12 @@ public class PayoutCollectPayoutItemsMoreUseCase {
                         item.setPayoutItem(payoutItem);
                     });
                 });
-        return null;
+
+        return new RsData<>(
+                "201-1",
+                "%d건의 정산데이터가 생성되었습니다.".formatted(payoutReadyCandidateItems.size()),
+                payoutReadyCandidateItems.size()
+        );
     }
 
     private List<PayoutCandidateItem> findPayoutReadyCandidateItems(int limit) {

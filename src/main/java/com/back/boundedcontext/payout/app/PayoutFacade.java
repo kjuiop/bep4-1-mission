@@ -47,6 +47,7 @@ public class PayoutFacade {
         return payoutCollectPayoutItemsMoreUseCase.collectPayoutItemsMore(limit);
     }
 
+    @Transactional
     public RsData<Integer> completePayoutsMore(int limit) {
         return payoutCompletePayoutsMoreUseCase.completePayoutsMore(limit);
     }
