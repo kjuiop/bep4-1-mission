@@ -4,6 +4,7 @@ import com.back.boundedcontext.payout.app.PayoutFacade;
 import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
+import com.back.shared.payout.event.PayoutCompletedEvent;
 import com.back.shared.payout.event.PayoutMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -45,5 +46,11 @@ public class PayoutEventListener {
     @Transactional(propagation = REQUIRES_NEW)
     public void handle(MarketOrderPaymentCompletedEvent event) {
         payoutFacade.addPayoutCandidateItems(event.getOrder());
+    }
+
+    @TransactionalEventListener(phase = AFTER_COMMIT)
+    @Transactional(propagation = REQUIRES_NEW)
+    public void handle(PayoutCompletedEvent event) {
+        payoutFacade.createPayout(event.getPayout().getPayeeId());
     }
 }

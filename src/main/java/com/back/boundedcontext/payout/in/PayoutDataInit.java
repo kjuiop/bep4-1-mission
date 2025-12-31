@@ -54,6 +54,8 @@ public class PayoutDataInit {
     public ApplicationRunner payoutDataInitApplicationRunner() {
         return args -> {
             self.forceMakePayoutReadyCandidatesItems();
+            self.collectPayoutItemsMore();
+            self.completePayoutsMore();
             self.runCollectPayoutItemsAndCompletePayoutsBatchJob();
         };
     }
@@ -67,6 +69,16 @@ public class PayoutDataInit {
                     LocalDateTime.now().minusDays(PayoutPolicy.getPayoutReadyWaitingDays() + 1)
             );
         });
+    }
+
+    @Transactional
+    public void collectPayoutItemsMore() {
+        payoutFacade.collectPayoutItemsMore(2);
+    }
+
+    @Transactional
+    public void completePayoutsMore() {
+        payoutFacade.completePayoutsMore(1);
     }
 
     public void runCollectPayoutItemsAndCompletePayoutsBatchJob() {
