@@ -2,7 +2,7 @@ package com.back.boundedcontext.member.app;
 
 import com.back.boundedcontext.member.domain.Member;
 import com.back.boundedcontext.member.out.repository.MemberRepository;
-import com.back.global.eventpublisher.EventPublisher;
+import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.global.exception.DomainException;
 import com.back.global.rsdata.RsData;
 import com.back.shared.member.event.MemberJoinedEvent;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class MemberJoinUseCase {
 
     private final MemberRepository memberRepository;
-    private final EventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
 
     public RsData<Member> join(String username, String password, String nickname) {
         memberRepository.findByUsername(username).ifPresent(member -> {

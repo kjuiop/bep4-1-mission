@@ -5,10 +5,8 @@ import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostComment;
 import com.back.boundedcontext.post.domain.PostMember;
 import com.back.boundedcontext.post.out.PostRepository;
-import com.back.global.eventpublisher.EventPublisher;
+import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.global.rsdata.RsData;
-import com.back.shared.post.dto.PostCommentDto;
-import com.back.shared.post.dto.PostDto;
 import com.back.shared.post.event.PostCommentCreatedEvent;
 import com.back.shared.post.event.PostCreatedEvent;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostWriteUseCase {
 
     private final PostRepository postRepository;
-    private final EventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
     private final MemberApiClient memberApiClient;
 
     @Transactional

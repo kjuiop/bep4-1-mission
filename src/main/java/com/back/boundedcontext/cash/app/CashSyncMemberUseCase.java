@@ -2,8 +2,7 @@ package com.back.boundedcontext.cash.app;
 
 import com.back.boundedcontext.cash.domain.CashMember;
 import com.back.boundedcontext.cash.out.CashMemberRepository;
-import com.back.global.eventpublisher.EventPublisher;
-import com.back.shared.member.dto.CashMemberDto;
+import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.member.dto.MemberDto;
 import com.back.shared.member.event.CashMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class CashSyncMemberUseCase {
 
     private final CashMemberRepository cashMemberRepository;
-    private final EventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
 
     public CashMember syncMember(MemberDto member) {
         boolean isNew = !cashMemberRepository.existsById(member.getId());

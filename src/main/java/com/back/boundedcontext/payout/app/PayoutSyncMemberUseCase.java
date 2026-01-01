@@ -2,7 +2,7 @@ package com.back.boundedcontext.payout.app;
 
 import com.back.boundedcontext.payout.domain.PayoutMember;
 import com.back.boundedcontext.payout.out.PayoutMemberRepository;
-import com.back.global.eventpublisher.EventPublisher;
+import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.member.dto.MemberDto;
 import com.back.shared.payout.event.PayoutMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class PayoutSyncMemberUseCase {
 
     private final PayoutMemberRepository payoutMemberRepository;
-    private final EventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
 
     public PayoutMember syncMember(MemberDto member) {
         boolean isNew = !payoutMemberRepository.existsById(member.getId());

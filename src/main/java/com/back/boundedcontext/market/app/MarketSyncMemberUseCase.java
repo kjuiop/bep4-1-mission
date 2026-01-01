@@ -2,8 +2,7 @@ package com.back.boundedcontext.market.app;
 
 import com.back.boundedcontext.market.domain.MarketMember;
 import com.back.boundedcontext.market.out.MarketMemberRepository;
-import com.back.global.eventpublisher.EventPublisher;
-import com.back.shared.member.dto.MarketMemberDto;
+import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.member.dto.MemberDto;
 import com.back.shared.member.event.MarketMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MarketSyncMemberUseCase {
     private final MarketMemberRepository marketMemberRepository;
-    private final EventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
 
     public MarketMember syncMember(MemberDto member) {
         boolean isNew = !marketMemberRepository.existsById(member.getId());

@@ -1,7 +1,6 @@
 package com.back.boundedcontext.member.app;
 
 import com.back.boundedcontext.member.domain.Member;
-import com.back.boundedcontext.member.domain.MemberPolicy;
 import com.back.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.Optional;
 public class MemberFacade {
 
     private final MemberJoinUseCase memberJoinUseCase;
-    private final MemberPolicy memberPolicy;
     private final MemberGetRandomSecureTipUseCase memberGetRandomSecureTipUseCase;
     private final MemberSupport memberSupport;
 

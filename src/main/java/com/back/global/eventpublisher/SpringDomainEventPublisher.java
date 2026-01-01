@@ -2,18 +2,17 @@ package com.back.global.eventpublisher;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
 
 /**
  * @author : JAKE
  * @date : 25. 12. 23.
  */
-@Service
 @RequiredArgsConstructor
-public class EventPublisher {
-    private final ApplicationEventPublisher applicationEventPublisher;
+public class SpringDomainEventPublisher implements DomainEventPublisher {
+    private final ApplicationEventPublisher delegate;
 
+    @Override
     public void publish(Object event) {
-        applicationEventPublisher.publishEvent(event);
+        delegate.publishEvent(event);
     }
 }

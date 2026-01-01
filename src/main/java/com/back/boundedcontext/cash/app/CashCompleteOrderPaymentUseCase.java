@@ -2,7 +2,7 @@ package com.back.boundedcontext.cash.app;
 
 import com.back.boundedcontext.cash.domain.CashLog;
 import com.back.boundedcontext.cash.domain.Wallet;
-import com.back.global.eventpublisher.EventPublisher;
+import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.cash.event.CashOrderPaymentFailedEvent;
 import com.back.shared.cash.event.CashOrderPaymentSuccessdedEvent;
 import com.back.shared.market.dto.OrderDto;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class CashCompleteOrderPaymentUseCase {
 
     private final CashSupport cashSupport;
-    private final EventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
 
     public void completeOrderPayment(OrderDto order, long pgPaymentAmount) {
         Wallet customerWallet = cashSupport.findWalletByHolderId(order.getBuyerId()).get();
