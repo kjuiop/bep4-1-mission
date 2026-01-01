@@ -9,6 +9,7 @@ import com.back.shared.post.dto.PostDto;
 import com.back.shared.post.out.PostApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author : JAKE
  * @date : 25. 12. 26.
  */
+@ConditionalOnProperty(name = "app.data-init.enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 @Slf4j
 public class MarketDataInit {

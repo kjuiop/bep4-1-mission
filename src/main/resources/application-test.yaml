@@ -1,0 +1,10 @@
+app:
+  data-init:
+    enabled: false
+spring:
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    consumer:
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"

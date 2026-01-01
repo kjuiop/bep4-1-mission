@@ -14,6 +14,7 @@ import org.springframework.batch.core.launch.JobInstanceAlreadyCompleteException
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.JobRestartException;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -28,6 +29,7 @@ import java.time.format.DateTimeFormatter;
  * @author : JAKE
  * @date : 25. 12. 29.
  */
+@ConditionalOnProperty(name = "app.data-init.enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 @Slf4j
 public class PayoutDataInit {
