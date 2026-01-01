@@ -3,7 +3,7 @@ package com.back.global.config;
 import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.global.eventpublisher.KafkaDomainEventPublisher;
 import com.back.global.eventpublisher.SpringDomainEventPublisher;
-import com.back.global.eventpublisher.topic.TopicResolver;
+import com.back.global.eventpublisher.topic.KafkaResolver;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,8 +18,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 @Configuration
 public class GlobalConfig {
 
-    public static String INTERNAL_CALL_BACK_URL;
-
     @Getter
     private static DomainEventPublisher eventPublisher;
 
@@ -28,7 +26,7 @@ public class GlobalConfig {
             @Value("${app.event-publisher.type:spring}") String type,
             ApplicationEventPublisher applicationEventPublisher,
             KafkaTemplate<String, Object> kafkaTemplate,
-            TopicResolver topicResolver
+            KafkaResolver topicResolver
     ) {
         DomainEventPublisher publisher =
                 "kafka".equalsIgnoreCase(type)
