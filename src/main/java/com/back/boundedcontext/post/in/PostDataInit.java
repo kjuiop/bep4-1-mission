@@ -6,13 +6,11 @@ import com.back.boundedcontext.post.domain.PostComment;
 import com.back.boundedcontext.post.domain.PostMember;
 import com.back.global.rsdata.RsData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,23 +27,23 @@ public class PostDataInit {
     // 자기 자신의 프록시를 참조하도록 설정
     private final PostDataInit self;
     private final PostFacade postFacade;
-
-    @Value("${app.event-publisher.type}")
-    private String publisherType;
+    private final boolean useKafkaEvent;
 
     public PostDataInit(
             @Lazy PostDataInit self,
-            PostFacade postFacade
+            PostFacade postFacade,
+            boolean useKafkaEvent
             ) {
         this.self = self;
         this.postFacade = postFacade;
+        this.useKafkaEvent = useKafkaEvent;
     }
 
     @Bean
     @Order(3)
     public ApplicationRunner postDataInitApplicationRunner() {
         return args -> {
-            if (!publisherType.equalsIgnoreCase("spring")) {
+            if (useKafkaEvent) {
                 return;
             }
 

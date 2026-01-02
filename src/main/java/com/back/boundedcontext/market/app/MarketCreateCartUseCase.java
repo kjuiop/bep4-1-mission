@@ -4,6 +4,7 @@ import com.back.boundedcontext.market.domain.Cart;
 import com.back.boundedcontext.market.domain.MarketMember;
 import com.back.boundedcontext.market.out.CartRepository;
 import com.back.boundedcontext.market.out.MarketMemberRepository;
+import com.back.global.config.GlobalConfig;
 import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.global.rsdata.RsData;
 import com.back.shared.job.dto.JobDto;
@@ -25,6 +26,7 @@ public class MarketCreateCartUseCase {
     private final MarketMemberRepository marketMemberRepository;
     private final CartRepository cartRepository;
     private final DomainEventPublisher eventPublisher;
+    private final boolean useKafkaEvent;
 
     private boolean checkExecuteDataInit = true;
 
@@ -34,7 +36,7 @@ public class MarketCreateCartUseCase {
         Cart cart = new Cart(_customer);
         cartRepository.save(cart);
 
-        if (checkExecuteDataInit && isReadyInitData()) {
+        if (useKafkaEvent && checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByCartForMarket()));
             checkExecuteDataInit = false;
         }

@@ -1,6 +1,5 @@
 package com.back.boundedcontext.post.app;
 
-import com.back.boundedcontext.cash.domain.CashMember;
 import com.back.boundedcontext.member.out.apiclient.MemberApiClient;
 import com.back.boundedcontext.post.domain.Post;
 import com.back.boundedcontext.post.domain.PostComment;
@@ -29,6 +28,7 @@ public class PostWriteUseCase {
     private final PostRepository postRepository;
     private final DomainEventPublisher eventPublisher;
     private final MemberApiClient memberApiClient;
+    private final boolean useKafkaEvent;
 
     private boolean checkExecuteDataInit = true;
 
@@ -41,7 +41,7 @@ public class PostWriteUseCase {
                 new PostCreatedEvent(saved.toDto())
         );
 
-        if (checkExecuteDataInit && isReadyInitData()) {
+        if (useKafkaEvent && checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByPostForMarket()));
             checkExecuteDataInit = false;
         }

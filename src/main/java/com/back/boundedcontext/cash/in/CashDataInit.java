@@ -5,13 +5,11 @@ import com.back.boundedcontext.cash.domain.CashLog;
 import com.back.boundedcontext.cash.domain.CashMember;
 import com.back.boundedcontext.cash.domain.Wallet;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,24 +24,24 @@ public class CashDataInit {
 
     private final CashDataInit self;
     private final CashFacade cashFacade;
-
-    @Value("${app.event-publisher.type}")
-    private String publisherType;
+    private final boolean useKafkaEvent;
 
     public CashDataInit(
             @Lazy CashDataInit self,
-            CashFacade cashFacade
+            CashFacade cashFacade,
+            boolean useKafkaEvent
     ) {
         this.self = self;
         this.cashFacade = cashFacade;
+        this.useKafkaEvent = useKafkaEvent;
     }
 
     @Bean
-    @Order(4)
+    @Order(3)
     public ApplicationRunner cashDataInitApplicationRunner() {
         return args -> {
 
-            if (!publisherType.equalsIgnoreCase("spring")) {
+            if (useKafkaEvent) {
                 return;
             }
 

@@ -38,4 +38,11 @@ public class GlobalConfig {
         GlobalConfig.eventPublisher = publisher;
         return publisher;
     }
+
+    @Bean
+    public boolean useKafkaEvent(
+            @Value("${app.event-publisher.type:spring}") String type
+    ) {
+        return "kafka".equalsIgnoreCase(type);
+    }
 }

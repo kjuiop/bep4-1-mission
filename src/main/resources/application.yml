@@ -1,6 +1,6 @@
 app:
   event-publisher:
-    type: kafka
+    type: spring
 server:
   port: 8080
 spring:

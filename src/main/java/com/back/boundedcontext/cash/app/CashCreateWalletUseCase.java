@@ -4,13 +4,10 @@ import com.back.boundedcontext.cash.domain.CashMember;
 import com.back.boundedcontext.cash.domain.Wallet;
 import com.back.boundedcontext.cash.out.CashMemberRepository;
 import com.back.boundedcontext.cash.out.WalletRepository;
-import com.back.boundedcontext.post.domain.PostMember;
 import com.back.global.eventpublisher.DomainEventPublisher;
-import com.back.shared.cash.event.CashReadyInitEvent;
 import com.back.shared.job.dto.JobDto;
 import com.back.shared.job.event.JobReadyInitEvent;
 import com.back.shared.member.dto.CashMemberDto;
-import com.back.shared.post.event.PostReadyInitEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +24,7 @@ public class CashCreateWalletUseCase {
     private final CashMemberRepository cashMemberRepository;
     private final WalletRepository walletRepository;
     private final DomainEventPublisher eventPublisher;
+    private final boolean useKafkaEvent;
 
     private boolean checkExecuteDataInit = true;
 
@@ -38,7 +36,7 @@ public class CashCreateWalletUseCase {
         Wallet wallet = new Wallet(_member);
         Wallet saved =  walletRepository.save(wallet);
 
-        if (checkExecuteDataInit && isReadyInitData()) {
+        if (useKafkaEvent && checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByCashWallet()));
             checkExecuteDataInit = false;
         }

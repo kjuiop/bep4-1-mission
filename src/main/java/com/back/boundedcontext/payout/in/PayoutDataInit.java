@@ -13,7 +13,6 @@ import org.springframework.batch.core.launch.JobExecutionAlreadyRunningException
 import org.springframework.batch.core.launch.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.JobRestartException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -39,28 +38,28 @@ public class PayoutDataInit {
     private final PayoutFacade payoutFacade;
     private final JobOperator jobOperator;
     private final Job payoutCollectItemsAndCompletePayoutsJob;
-
-    @Value("${app.event-publisher.type}")
-    private String publisherType;
+    private final boolean useKafkaEvent;
 
     public PayoutDataInit(
             @Lazy PayoutDataInit self,
             PayoutFacade payoutFacade,
             JobOperator jobOperator,
-            Job payoutCollectItemsAndCompletePayoutsJob
+            Job payoutCollectItemsAndCompletePayoutsJob,
+            boolean useKafkaEvent
     ) {
         this.self = self;
         this.payoutFacade = payoutFacade;
         this.jobOperator = jobOperator;
         this.payoutCollectItemsAndCompletePayoutsJob = payoutCollectItemsAndCompletePayoutsJob;
+        this.useKafkaEvent = useKafkaEvent;
     }
 
     @Bean
-    @Order(6)
+    @Order(5)
     public ApplicationRunner payoutDataInitApplicationRunner() {
         return args -> {
 
-            if (!publisherType.equalsIgnoreCase("spring")) {
+            if (useKafkaEvent) {
                 return;
             }
 

@@ -21,6 +21,7 @@ public class PostSyncMemberUseCase {
 
     private final PostMemberRepository postMemberRepository;
     private final DomainEventPublisher eventPublisher;
+    private final boolean useKafkaEvent;
 
     private boolean checkExecuteDataInit = true;
 
@@ -37,7 +38,7 @@ public class PostSyncMemberUseCase {
 
         PostMember saved =  postMemberRepository.save(postMember);
 
-        if (checkExecuteDataInit && isReadyInitData()) {
+        if (useKafkaEvent && checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByPostMember()));
             checkExecuteDataInit = false;
         }

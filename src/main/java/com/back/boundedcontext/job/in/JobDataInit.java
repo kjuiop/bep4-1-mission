@@ -2,7 +2,6 @@ package com.back.boundedcontext.job.in;
 
 import com.back.boundedcontext.job.app.JobFacade;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -22,23 +21,23 @@ public class JobDataInit {
 
     private final JobDataInit self;
     private final JobFacade jobFacade;
-
-    @Value("${app.event-publisher.type}")
-    private String publisherType;
+    private final boolean useKafkaEvent;
 
     public JobDataInit(
             @Lazy JobDataInit self,
-            JobFacade jobFacade
+            JobFacade jobFacade,
+            boolean useKafkaEvent
     ) {
         this.self = self;
         this.jobFacade = jobFacade;
+        this.useKafkaEvent = useKafkaEvent;
     }
 
     @Bean
     @Order(1)
     public ApplicationRunner jobDataInitApplicationRunner() {
         return args -> {
-            if (!publisherType.equalsIgnoreCase("kafka")) {
+            if (!useKafkaEvent) {
                 return;
             }
 

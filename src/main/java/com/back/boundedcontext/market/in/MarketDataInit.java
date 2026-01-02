@@ -8,7 +8,6 @@ import com.back.boundedcontext.market.domain.Product;
 import com.back.shared.post.dto.PostDto;
 import com.back.shared.post.out.PostApiClient;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -29,25 +28,26 @@ public class MarketDataInit {
     private final MarketDataInit self;
     private final PostApiClient postApiClient;
     private final MarketFacade marketFacade;
-
-    @Value("${app.event-publisher.type}")
-    private String publisherType;
+    private final boolean useKafkaEvent;
 
     public MarketDataInit (
             @Lazy MarketDataInit self,
             MarketFacade marketFacade,
-            PostApiClient postApiClient) {
+            PostApiClient postApiClient,
+            boolean useKafkaEvent
+            ) {
         this.self = self;
         this.postApiClient = postApiClient;
         this.marketFacade = marketFacade;
+        this.useKafkaEvent = useKafkaEvent;
     }
 
     @Bean
-    @org.springframework.core.annotation.Order(5)
+    @org.springframework.core.annotation.Order(4)
     public ApplicationRunner marketDataInitApplicationRunnner() {
         return args -> {
 
-            if (!publisherType.equalsIgnoreCase("spring")) {
+            if (useKafkaEvent) {
                 return;
             }
 

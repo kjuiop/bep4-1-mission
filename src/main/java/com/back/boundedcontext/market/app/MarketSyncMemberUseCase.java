@@ -3,6 +3,7 @@ package com.back.boundedcontext.market.app;
 import com.back.boundedcontext.cash.domain.CashMember;
 import com.back.boundedcontext.market.domain.MarketMember;
 import com.back.boundedcontext.market.out.MarketMemberRepository;
+import com.back.global.config.GlobalConfig;
 import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.job.dto.JobDto;
 import com.back.shared.job.event.JobReadyInitEvent;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class MarketSyncMemberUseCase {
     private final MarketMemberRepository marketMemberRepository;
     private final DomainEventPublisher eventPublisher;
+    private final boolean useKafkaEvent;
 
     private boolean checkExecuteDataInit = true;
 
@@ -48,7 +50,7 @@ public class MarketSyncMemberUseCase {
             );
         }
 
-        if (checkExecuteDataInit && isReadyInitData()) {
+        if (useKafkaEvent && checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByMarketMemberForMarket()));
             checkExecuteDataInit = false;
         }

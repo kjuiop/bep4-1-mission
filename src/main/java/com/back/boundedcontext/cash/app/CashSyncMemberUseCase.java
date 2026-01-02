@@ -1,10 +1,8 @@
 package com.back.boundedcontext.cash.app;
 
 import com.back.boundedcontext.cash.domain.CashMember;
-import com.back.boundedcontext.cash.domain.Wallet;
 import com.back.boundedcontext.cash.out.CashMemberRepository;
 import com.back.global.eventpublisher.DomainEventPublisher;
-import com.back.shared.cash.event.CashReadyInitEvent;
 import com.back.shared.job.dto.JobDto;
 import com.back.shared.job.event.JobReadyInitEvent;
 import com.back.shared.member.dto.MemberDto;
@@ -24,6 +22,7 @@ public class CashSyncMemberUseCase {
 
     private final CashMemberRepository cashMemberRepository;
     private final DomainEventPublisher eventPublisher;
+    private final boolean useKafkaEvent;
 
     private boolean checkExecuteDataInit = true;
 
@@ -50,7 +49,7 @@ public class CashSyncMemberUseCase {
             );
         }
 
-        if (checkExecuteDataInit && isReadyInitData()) {
+        if (useKafkaEvent && checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByCashMember()));
             checkExecuteDataInit = false;
         }
