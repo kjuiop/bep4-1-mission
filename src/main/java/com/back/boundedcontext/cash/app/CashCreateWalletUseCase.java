@@ -7,6 +7,8 @@ import com.back.boundedcontext.cash.out.WalletRepository;
 import com.back.boundedcontext.post.domain.PostMember;
 import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.cash.event.CashReadyInitEvent;
+import com.back.shared.job.dto.JobDto;
+import com.back.shared.job.event.JobReadyInitEvent;
 import com.back.shared.member.dto.CashMemberDto;
 import com.back.shared.post.event.PostReadyInitEvent;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +38,10 @@ public class CashCreateWalletUseCase {
         Wallet wallet = new Wallet(_member);
         Wallet saved =  walletRepository.save(wallet);
 
-        // 서버가 1대일 때 사용, 2대 이상일 때에는 DB 에 상태 저장 필요
-//        if (checkExecuteDataInit && isReadyInitData()) {
-//            eventPublisher.publish(new CashReadyInitEvent());
-//            // 수행 완료
-//            checkExecuteDataInit = false;
-//        }
+        if (checkExecuteDataInit && isReadyInitData()) {
+            eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByCashWallet()));
+            checkExecuteDataInit = false;
+        }
 
         return saved;
     }

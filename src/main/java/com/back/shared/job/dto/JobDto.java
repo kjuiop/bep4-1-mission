@@ -30,4 +30,18 @@ public class JobDto {
                 .satisfiedConditions(1)
                 .build();
     }
+
+    public static JobDto readyByCashMember() {
+        return JobDto.builder()
+                .jobName("cash-data-init")
+                .satisfiedConditions(1)
+                .build();
+    }
+
+    public static JobDto readyByCashWallet() {
+        return JobDto.builder()
+                .jobName("cash-data-init")
+                .satisfiedConditions(1)
+                .build();
+    }
 }

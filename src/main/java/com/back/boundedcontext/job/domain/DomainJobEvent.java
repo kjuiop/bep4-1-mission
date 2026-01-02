@@ -1,6 +1,6 @@
 package com.back.boundedcontext.job.domain;
 
-import com.back.global.jpa.entity.BaseManualIdAndTime;
+import com.back.global.jpa.entity.BaseIdAndTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "DOMAIN_JOB_EVENT")
 @NoArgsConstructor
 @Getter
-public class DomainJobEvent extends BaseManualIdAndTime {
+public class DomainJobEvent extends BaseIdAndTime {
 
     private String jobName;
 
