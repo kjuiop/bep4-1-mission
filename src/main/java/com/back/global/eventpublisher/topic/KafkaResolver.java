@@ -78,19 +78,19 @@ public class KafkaResolver {
     }
 
     public String resolveKey(Object event) {
-        if (event instanceof MemberJoinedEvent e) return String.valueOf(e.getMember().getId());
-        if (event instanceof MemberModifiedEvent e) return String.valueOf(e.getMember().getId());
-        if (event instanceof CashMemberCreatedEvent e) return String.valueOf(e.getMember().getId());
-        if (event instanceof MarketMemberCreatedEvent e) return String.valueOf(e.getMember().getId());
-        if (event instanceof CashOrderPaymentSuccessdedEvent e) return String.valueOf(e.getOrder().getId());
-        if (event instanceof CashOrderPaymentFailedEvent e) return String.valueOf(e.getOrder().getId());
-        if (event instanceof MarketOrderRequestPaymentStartedEvent e) return String.valueOf(e.getOrder().getId());
-        if (event instanceof MarketOrderPaymentRequestedEvent e) return String.valueOf(e.getOrder().getId());
-        if (event instanceof MarketOrderPaymentCompletedEvent e) return String.valueOf(e.getOrder().getId());
-        if (event instanceof PayoutMemberCreatedEvent e) return String.valueOf(e.getMember().getId());
-        if (event instanceof PayoutCompletedEvent e) return String.valueOf(e.getPayout().getId());
-        if (event instanceof PostCreatedEvent e) return String.valueOf(e.getPost().getId());
-        if (event instanceof PostCommentCreatedEvent e) return String.valueOf(e.getPostComment().getPostId());
+        if (event instanceof MemberJoinedEvent e) return "member-%d".formatted(e.getMember().getId());
+        if (event instanceof MemberModifiedEvent e) return "member-%d".formatted(e.getMember().getId());
+        if (event instanceof CashMemberCreatedEvent e) return "member-%d".formatted(e.getMember().getId());
+        if (event instanceof MarketMemberCreatedEvent e) return "member-%d".formatted(e.getMember().getId());
+        if (event instanceof CashOrderPaymentSuccessdedEvent e) return "order-%d".formatted(e.getOrder().getId());
+        if (event instanceof CashOrderPaymentFailedEvent e) return "order-%d".formatted(e.getOrder().getId());
+        if (event instanceof MarketOrderRequestPaymentStartedEvent e) return "order-%d".formatted(e.getOrder().getId());
+        if (event instanceof MarketOrderPaymentRequestedEvent e) return "order-%d".formatted(e.getOrder().getId());
+        if (event instanceof MarketOrderPaymentCompletedEvent e) return "order-%d".formatted(e.getOrder().getId());
+        if (event instanceof PayoutMemberCreatedEvent e) return "member-%d".formatted(e.getMember().getId());
+        if (event instanceof PayoutCompletedEvent e) return "payout-%d".formatted(e.getPayout().getId());
+        if (event instanceof PostCreatedEvent e) return "post-%d".formatted(e.getPost().getId());
+        if (event instanceof PostCommentCreatedEvent e) return "post-%d".formatted(e.getPostComment().getPostId());
         if (event instanceof PostReadyInitEvent e) return "post-init-ready";
         if (event instanceof CashReadyInitEvent e) return "cash-init-ready";
         if (event instanceof MarketReadyInitEvent e) return "market-init-ready";
