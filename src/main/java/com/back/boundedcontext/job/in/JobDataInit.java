@@ -51,5 +51,6 @@ public class JobDataInit {
         jobFacade.createInitDataJob("post-data-init", 1);
         jobFacade.createInitDataJob("cash-data-init", 2);
         jobFacade.createInitDataJob("market-data-init", 3);
+        jobFacade.createInitDataJob("payout-data-init", 1);
     }
 }

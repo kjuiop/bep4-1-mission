@@ -1,13 +1,12 @@
-package com.back.boundedcontext.cash.in;
+package com.back.boundedcontext.payout.in;
 
-import com.back.boundedcontext.cash.app.CashFacade;
+import com.back.boundedcontext.payout.app.PayoutFacade;
 import com.back.global.eventpublisher.topic.DomainEventEnvelope;
-import com.back.shared.market.event.MarketOrderPaymentRequestedEvent;
-import com.back.shared.market.event.MarketOrderRequestPaymentStartedEvent;
-import com.back.shared.member.event.CashMemberCreatedEvent;
+import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
 import com.back.shared.payout.event.PayoutCompletedEvent;
+import com.back.shared.payout.event.PayoutMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,19 +17,19 @@ import tools.jackson.databind.ObjectMapper;
 import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 /**
- * @author : JAKE
- * @date : 26. 1. 2.
- */
+  * @author : JAKE
+  * @date : 26. 1. 2.
+*/
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CashKafkaListener {
+public class PayoutKafkaListener {
 
-    private final CashFacade cashFacade;
-    private final CashDataInit cashDataInit;
+    private final PayoutFacade payoutFacade;
+    private final PayoutDataInit payoutDataInit;
     private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "member-events", groupId = "cash-service")
+    @KafkaListener(topics = "member-events", groupId = "payout-service")
     @Transactional(propagation = REQUIRES_NEW)
     public void memberEventHandle(String value) {
 
@@ -41,12 +40,12 @@ public class CashKafkaListener {
 
                 case "MemberJoinedEvent" -> {
                     MemberJoinedEvent event = objectMapper.treeToValue(envelope.getPayload(), MemberJoinedEvent.class);
-                    cashFacade.syncMember(event.getMember());
+                    payoutFacade.syncMember(event.getMember());
                 }
 
                 case "MemberModifiedEvent" -> {
                     MemberModifiedEvent event = objectMapper.treeToValue(envelope.getPayload(), MemberModifiedEvent.class);
-                    cashFacade.syncMember(event.getMember());
+                    payoutFacade.syncMember(event.getMember());
                 }
 
                 default -> {
@@ -59,35 +58,7 @@ public class CashKafkaListener {
         }
     }
 
-    @KafkaListener(topics = "cash-events", groupId = "cash-service")
-    @Transactional(propagation = REQUIRES_NEW)
-    public void cashEventHandle(String value) {
-
-        try {
-            DomainEventEnvelope envelope = objectMapper.readValue(value, DomainEventEnvelope.class);
-
-            switch (envelope.getEventType()) {
-
-                case "CashMemberCreatedEvent" -> {
-                    CashMemberCreatedEvent event = objectMapper.treeToValue(envelope.getPayload(), CashMemberCreatedEvent.class);
-                    cashFacade.createWallet(event.getMember());
-                }
-
-                case "CashReadyInitEvent" -> {
-                    cashDataInit.makeBaseCredits();
-                }
-
-                default -> {
-                    // ignore
-                }
-            }
-        } catch (Exception e) {
-            log.error("Kafka consume failed. raw={}", value, e);
-            throw e;
-        }
-    }
-
-    @KafkaListener(topics = "market-events", groupId = "cash-service")
+    @KafkaListener(topics = "market-events", groupId = "payout-service")
     @Transactional(propagation = REQUIRES_NEW)
     public void marketEventHandle(String value) {
 
@@ -96,14 +67,9 @@ public class CashKafkaListener {
 
             switch (envelope.getEventType()) {
 
-                case "MarketOrderRequestPaymentStartedEvent" -> {
-                    MarketOrderRequestPaymentStartedEvent event = objectMapper.treeToValue(envelope.getPayload(), MarketOrderRequestPaymentStartedEvent.class);
-                    cashFacade.handle(event);
-                }
-
-                case "MarketOrderPaymentRequestedEvent" -> {
-                    MarketOrderPaymentRequestedEvent event = objectMapper.treeToValue(envelope.getPayload(), MarketOrderPaymentRequestedEvent.class);
-                    cashFacade.handle(event);
+                case "MarketOrderPaymentCompletedEvent" -> {
+                    MarketOrderPaymentCompletedEvent event = objectMapper.treeToValue(envelope.getPayload(), MarketOrderPaymentCompletedEvent.class);
+                    payoutFacade.addPayoutCandidateItems(event.getOrder());
                 }
 
                 default -> {
@@ -116,7 +82,7 @@ public class CashKafkaListener {
         }
     }
 
-    @KafkaListener(topics = "payout-events", groupId = "cash-service")
+    @KafkaListener(topics = "payout-events", groupId = "payout-service")
     @Transactional(propagation = REQUIRES_NEW)
     public void payoutEventHandle(String value) {
 
@@ -125,9 +91,20 @@ public class CashKafkaListener {
 
             switch (envelope.getEventType()) {
 
+                case "PayoutMemberCreatedEvent" -> {
+                    PayoutMemberCreatedEvent event = objectMapper.treeToValue(envelope.getPayload(), PayoutMemberCreatedEvent.class);
+                    payoutFacade.createPayout(event.getMember().getId());
+                }
+
                 case "PayoutCompletedEvent" -> {
                     PayoutCompletedEvent event = objectMapper.treeToValue(envelope.getPayload(), PayoutCompletedEvent.class);
-                    cashFacade.completePayout(event.getPayout());
+                    payoutFacade.createPayout(event.getPayout().getPayeeId());
+                }
+
+                case "PayoutReadyInitEvent" -> {
+                    payoutDataInit.forceMakePayoutReadyCandidatesItems();
+                    payoutDataInit.collectPayoutItemsMore();
+                    payoutDataInit.completePayoutsMore();
                 }
 
                 default -> {
@@ -139,5 +116,4 @@ public class CashKafkaListener {
             throw e;
         }
     }
-
 }

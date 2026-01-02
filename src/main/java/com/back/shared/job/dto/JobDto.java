@@ -65,4 +65,11 @@ public class JobDto {
                 .satisfiedConditions(1)
                 .build();
     }
+
+    public static JobDto readyByPayout() {
+        return JobDto.builder()
+                .jobName("payout-data-init")
+                .satisfiedConditions(1)
+                .build();
+    }
 }

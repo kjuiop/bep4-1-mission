@@ -14,6 +14,7 @@ import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
 import com.back.shared.payout.event.PayoutCompletedEvent;
 import com.back.shared.payout.event.PayoutMemberCreatedEvent;
+import com.back.shared.payout.event.PayoutReadyInitEvent;
 import com.back.shared.post.event.PostCommentCreatedEvent;
 import com.back.shared.post.event.PostCreatedEvent;
 import com.back.shared.post.event.PostReadyInitEvent;
@@ -69,6 +70,8 @@ public class KafkaResolver {
             return JOB_EVENT_TOPIC;
         } else if (event instanceof MarketReadyInitEvent) {
             return MARKET_EVENTS_TOPIC;
+        } else if (event instanceof PayoutReadyInitEvent) {
+            return PAYOUT_EVENTS_TOPIC;
         }
 
         return "unexpected-events";
@@ -91,6 +94,7 @@ public class KafkaResolver {
         if (event instanceof PostReadyInitEvent e) return "post-init-ready";
         if (event instanceof CashReadyInitEvent e) return "cash-init-ready";
         if (event instanceof MarketReadyInitEvent e) return "market-init-ready";
+        if (event instanceof PayoutReadyInitEvent e) return "payout-init-ready";
         if (event instanceof JobReadyInitEvent e) return String.valueOf(e.getJob().getJobName());
         return null;
     }

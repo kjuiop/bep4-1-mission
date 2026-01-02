@@ -2,6 +2,8 @@ package com.back.boundedcontext.market.in;
 
 import com.back.boundedcontext.market.app.MarketFacade;
 import com.back.global.eventpublisher.topic.DomainEventEnvelope;
+import com.back.shared.cash.event.CashOrderPaymentFailedEvent;
+import com.back.shared.cash.event.CashOrderPaymentSuccessdedEvent;
 import com.back.shared.member.event.MarketMemberCreatedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
@@ -75,6 +77,35 @@ public class MarketKafkaListener {
                     marketDataInit.makeBaseCartItems();
                     marketDataInit.makeBaseOrders();
                     marketDataInit.makeBasePaidOrders();
+                }
+
+                default -> {
+                    // ignore
+                }
+            }
+        } catch (Exception e) {
+            log.error("Kafka consume failed. raw={}", value, e);
+            throw e;
+        }
+    }
+
+    @KafkaListener(topics = "cash-events", groupId = "market-service")
+    @Transactional(propagation = REQUIRES_NEW)
+    public void cashEventHandle(String value) {
+
+        try {
+            DomainEventEnvelope envelope = objectMapper.readValue(value, DomainEventEnvelope.class);
+
+            switch (envelope.getEventType()) {
+
+                case "CashOrderPaymentSuccessdedEvent" -> {
+                    CashOrderPaymentSuccessdedEvent event = objectMapper.treeToValue(envelope.getPayload(), CashOrderPaymentSuccessdedEvent.class);
+                    marketFacade.handle(event);
+                }
+
+                case "CashOrderPaymentFailedEvent" -> {
+                    CashOrderPaymentFailedEvent event = objectMapper.treeToValue(envelope.getPayload(), CashOrderPaymentFailedEvent.class);
+                    marketFacade.handle(event);
                 }
 
                 default -> {
