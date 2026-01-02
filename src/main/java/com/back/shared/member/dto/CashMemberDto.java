@@ -1,8 +1,11 @@
 package com.back.shared.member.dto;
 
 import com.back.boundedcontext.cash.domain.CashMember;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +13,8 @@ import java.time.LocalDateTime;
  * @author : JAKE
  * @date : 25. 12. 26.
  */
-@AllArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class CashMemberDto {
     private final long id;
     private final LocalDateTime createDate;
@@ -20,14 +23,20 @@ public class CashMemberDto {
     private final String nickname;
     private final int activityScore;
 
-    public CashMemberDto(CashMember member) {
-        this(
-                member.getId(),
-                member.getCreateDate(),
-                member.getModifyDate(),
-                member.getUsername(),
-                member.getNickname(),
-                member.getActivityScore()
-        );
+    @JsonCreator
+    public CashMemberDto(
+            @JsonProperty("id") Long id,
+            @JsonProperty("username") String username,
+            @JsonProperty("nickname") String nickname,
+            @JsonProperty("activityScore") Integer activityScore,
+            @JsonProperty("createDate") LocalDateTime createDate,
+            @JsonProperty("modifyDate") LocalDateTime modifyDate
+    ) {
+        this.id = id;
+        this.createDate = createDate;
+        this.modifyDate = modifyDate;
+        this.username = username;
+        this.nickname = nickname;
+        this.activityScore = activityScore;
     }
 }

@@ -21,7 +21,7 @@ public class PostSyncMemberUseCase {
     private final PostMemberRepository postMemberRepository;
     private final DomainEventPublisher eventPublisher;
 
-    private boolean checkExecutePostDataInit = true;
+    private boolean checkExecuteDataInit = true;
 
     public PostMember syncMember(MemberDto member) {
         PostMember postMember = new PostMember(
@@ -37,10 +37,10 @@ public class PostSyncMemberUseCase {
         PostMember saved =  postMemberRepository.save(postMember);
 
         // 서버가 1대일 때 사용, 2대 이상일 때에는 DB 에 상태 저장 필요
-        if (checkExecutePostDataInit && isReadyInitData()) {
+        if (checkExecuteDataInit && isReadyInitData()) {
             eventPublisher.publish(new PostReadyInitEvent());
             // 수행 완료
-            checkExecutePostDataInit = false;
+            checkExecuteDataInit = false;
         }
 
 

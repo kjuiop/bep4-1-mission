@@ -2,6 +2,7 @@ package com.back.global.eventpublisher.topic;
 
 import com.back.shared.cash.event.CashOrderPaymentFailedEvent;
 import com.back.shared.cash.event.CashOrderPaymentSuccessdedEvent;
+import com.back.shared.cash.event.CashReadyInitEvent;
 import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.market.event.MarketOrderPaymentRequestedEvent;
 import com.back.shared.market.event.MarketOrderRequestPaymentStartedEvent;
@@ -13,7 +14,6 @@ import com.back.shared.payout.event.PayoutCompletedEvent;
 import com.back.shared.payout.event.PayoutMemberCreatedEvent;
 import com.back.shared.post.event.PostCommentCreatedEvent;
 import com.back.shared.post.event.PostCreatedEvent;
-import com.back.shared.post.event.PostInitCompletedEvent;
 import com.back.shared.post.event.PostReadyInitEvent;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +37,7 @@ public class KafkaResolver {
         } else if (event instanceof MemberModifiedEvent) {
             return MEMBER_EVENTS_TOPIC;
         } else if (event instanceof CashMemberCreatedEvent) {
-            return MEMBER_EVENTS_TOPIC;
+            return CASH_EVENTS_TOPIC;
         } else if (event instanceof MarketMemberCreatedEvent) {
             return MEMBER_EVENTS_TOPIC;
         } else if (event instanceof CashOrderPaymentSuccessdedEvent) {
@@ -60,6 +60,8 @@ public class KafkaResolver {
             return POST_EVENT_TOPIC;
         } else if (event instanceof PostReadyInitEvent) {
             return POST_EVENT_TOPIC;
+        } else if (event instanceof CashReadyInitEvent) {
+            return CASH_EVENTS_TOPIC;
         }
 
         return "unexpected-events";
@@ -79,7 +81,8 @@ public class KafkaResolver {
         if (event instanceof PayoutCompletedEvent e) return String.valueOf(e.getPayout().getId());
         if (event instanceof PostCreatedEvent e) return String.valueOf(e.getPost().getId());
         if (event instanceof PostCommentCreatedEvent e) return String.valueOf(e.getPostComment().getPostId());
-        if (event instanceof PostInitCompletedEvent e) return "post-init-completed";
+        if (event instanceof PostReadyInitEvent e) return "post-init-ready";
+        if (event instanceof CashReadyInitEvent e) return "cash-init-ready";
         return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.back.shared.post.event;
+package com.back.shared.cash.event;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class PostInitCompletedEvent {
+public class CashReadyInitEvent {
 }
