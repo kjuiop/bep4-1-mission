@@ -56,7 +56,7 @@ public class PayoutDataInit {
     }
 
     @Bean
-    @Order(4)
+    @Order(6)
     public ApplicationRunner payoutDataInitApplicationRunner() {
         return args -> {
 

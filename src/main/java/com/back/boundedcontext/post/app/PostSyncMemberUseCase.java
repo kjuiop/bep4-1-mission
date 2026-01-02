@@ -3,8 +3,9 @@ package com.back.boundedcontext.post.app;
 import com.back.boundedcontext.post.domain.PostMember;
 import com.back.boundedcontext.post.out.PostMemberRepository;
 import com.back.global.eventpublisher.DomainEventPublisher;
+import com.back.shared.job.dto.JobDto;
+import com.back.shared.job.event.JobReadyInitEvent;
 import com.back.shared.member.dto.MemberDto;
-import com.back.shared.post.event.PostReadyInitEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +37,8 @@ public class PostSyncMemberUseCase {
 
         PostMember saved =  postMemberRepository.save(postMember);
 
-        // 서버가 1대일 때 사용, 2대 이상일 때에는 DB 에 상태 저장 필요
         if (checkExecuteDataInit && isReadyInitData()) {
-            eventPublisher.publish(new PostReadyInitEvent());
-            // 수행 완료
+            eventPublisher.publish(new JobReadyInitEvent(JobDto.readyByPostMember()));
             checkExecuteDataInit = false;
         }
 

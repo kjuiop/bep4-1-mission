@@ -39,7 +39,7 @@ public class CashDataInit {
     }
 
     @Bean
-    @Order(2)
+    @Order(4)
     public ApplicationRunner cashDataInitApplicationRunner() {
         return args -> {
 

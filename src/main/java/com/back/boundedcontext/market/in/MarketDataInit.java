@@ -43,7 +43,7 @@ public class MarketDataInit {
     }
 
     @Bean
-    @org.springframework.core.annotation.Order(3)
+    @org.springframework.core.annotation.Order(5)
     public ApplicationRunner marketDataInitApplicationRunnner() {
         return args -> {
 

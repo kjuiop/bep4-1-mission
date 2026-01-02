@@ -37,11 +37,11 @@ public class CashCreateWalletUseCase {
         Wallet saved =  walletRepository.save(wallet);
 
         // 서버가 1대일 때 사용, 2대 이상일 때에는 DB 에 상태 저장 필요
-        if (checkExecuteDataInit && isReadyInitData()) {
-            eventPublisher.publish(new CashReadyInitEvent());
-            // 수행 완료
-            checkExecuteDataInit = false;
-        }
+//        if (checkExecuteDataInit && isReadyInitData()) {
+//            eventPublisher.publish(new CashReadyInitEvent());
+//            // 수행 완료
+//            checkExecuteDataInit = false;
+//        }
 
         return saved;
     }

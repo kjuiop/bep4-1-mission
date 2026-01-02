@@ -3,6 +3,7 @@ package com.back.global.eventpublisher.topic;
 import com.back.shared.cash.event.CashOrderPaymentFailedEvent;
 import com.back.shared.cash.event.CashOrderPaymentSuccessdedEvent;
 import com.back.shared.cash.event.CashReadyInitEvent;
+import com.back.shared.job.event.JobReadyInitEvent;
 import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.market.event.MarketOrderPaymentRequestedEvent;
 import com.back.shared.market.event.MarketOrderRequestPaymentStartedEvent;
@@ -29,6 +30,7 @@ public class KafkaResolver {
     private static String MARKET_EVENTS_TOPIC = "market-events";
     private static String PAYOUT_EVENTS_TOPIC = "payout-events";
     private static String POST_EVENT_TOPIC = "post-events";
+    private static String JOB_EVENT_TOPIC = "job-events";
 
     public String resolveTopic(Object event) {
 
@@ -39,7 +41,7 @@ public class KafkaResolver {
         } else if (event instanceof CashMemberCreatedEvent) {
             return CASH_EVENTS_TOPIC;
         } else if (event instanceof MarketMemberCreatedEvent) {
-            return MEMBER_EVENTS_TOPIC;
+            return MARKET_EVENTS_TOPIC;
         } else if (event instanceof CashOrderPaymentSuccessdedEvent) {
             return CASH_EVENTS_TOPIC;
         } else if (event instanceof CashOrderPaymentFailedEvent) {
@@ -62,6 +64,8 @@ public class KafkaResolver {
             return POST_EVENT_TOPIC;
         } else if (event instanceof CashReadyInitEvent) {
             return CASH_EVENTS_TOPIC;
+        } else if (event instanceof JobReadyInitEvent) {
+            return JOB_EVENT_TOPIC;
         }
 
         return "unexpected-events";
@@ -83,6 +87,7 @@ public class KafkaResolver {
         if (event instanceof PostCommentCreatedEvent e) return String.valueOf(e.getPostComment().getPostId());
         if (event instanceof PostReadyInitEvent e) return "post-init-ready";
         if (event instanceof CashReadyInitEvent e) return "cash-init-ready";
+        if (event instanceof JobReadyInitEvent e) return String.valueOf(e.getJob().getJobName());
         return null;
     }
 }

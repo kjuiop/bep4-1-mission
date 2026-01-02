@@ -42,7 +42,7 @@ public class PostDataInit {
     }
 
     @Bean
-    @Order(2)
+    @Order(3)
     public ApplicationRunner postDataInitApplicationRunner() {
         return args -> {
             if (!publisherType.equalsIgnoreCase("spring")) {

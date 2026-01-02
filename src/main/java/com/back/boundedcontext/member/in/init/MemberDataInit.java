@@ -36,7 +36,7 @@ public class MemberDataInit {
     }
 
     @Bean
-    @Order(1)
+    @Order(2)
     public ApplicationRunner memberDataInitApplicationRunner() {
         return args -> {
             self.makeBaseMembers();
