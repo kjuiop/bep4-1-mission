@@ -38,8 +38,4 @@ public class MemberFacade {
     public String getRandomSecureTip() {
         return memberGetRandomSecureTipUseCase.getRandomSecureTip();
     }
-
-    public void completeMemberDataInit() {
-        memberSupport.completeMemberDataInit();
-    }
 }

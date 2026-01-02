@@ -40,9 +40,6 @@ public class MemberDataInit {
     public ApplicationRunner memberDataInitApplicationRunner() {
         return args -> {
             self.makeBaseMembers();
-            if (publisherType.equalsIgnoreCase("kafka")) {
-                self.completeMemberDataInit();
-            }
         };
     }
 
@@ -56,9 +53,5 @@ public class MemberDataInit {
         Member user1Member = memberFacade.join("user1", "1234", "유저1").getData();
         Member user2Member = memberFacade.join("user2", "1234", "유저2").getData();
         Member user3Member = memberFacade.join("user3", "1234", "유저3").getData();
-    }
-
-    public void completeMemberDataInit() {
-        memberFacade.completeMemberDataInit();
     }
 }

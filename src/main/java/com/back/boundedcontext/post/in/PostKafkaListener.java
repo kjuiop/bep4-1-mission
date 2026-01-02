@@ -64,4 +64,28 @@ public class PostKafkaListener {
             throw e;
         }
     }
+
+    @KafkaListener(topics = "post-events", groupId = "post-service")
+    @Transactional(propagation = REQUIRES_NEW)
+    public void postEventHandle(String value) {
+
+        try {
+            DomainEventEnvelope envelope = objectMapper.readValue(value, DomainEventEnvelope.class);
+
+            switch (envelope.getEventType()) {
+
+                case "PostReadyInitEvent" -> {
+                    postDataInit.makeBasePosts();
+                    postDataInit.makeBasePostComments();
+                }
+
+                default -> {
+                    // ignore
+                }
+            }
+        } catch (Exception e) {
+            log.error("Kafka consume failed. raw={}", value, e);
+            throw e;
+        }
+    }
 }
