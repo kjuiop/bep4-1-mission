@@ -1,6 +1,11 @@
 package com.back.global.eventpublisher.topic;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -10,17 +15,22 @@ import java.util.UUID;
  * @date : 26. 1. 1.
  */
 @Getter
+@Setter
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DomainEventEnvelope {
 
-    private final String eventId;
-    private final String eventType;
-    private final Instant occurredAt;
-    private final Object payload;
+    private String eventId;
+    private String eventType;
+    private Instant occurredAt;
+    private JsonNode payload;
 
-    public DomainEventEnvelope(Object event) {
-        this.eventId = UUID.randomUUID().toString();
-        this.eventType = event.getClass().getSimpleName();
-        this.occurredAt = Instant.now();
-        this.payload = event;
+    public static DomainEventEnvelope of(Object event, ObjectMapper om) {
+        DomainEventEnvelope e = new DomainEventEnvelope();
+        e.setEventId(UUID.randomUUID().toString());
+        e.setEventType(event.getClass().getSimpleName());
+        e.setOccurredAt(Instant.now());
+        e.setPayload(om.valueToTree(event));
+        return e;
     }
 }

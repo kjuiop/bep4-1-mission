@@ -3,6 +3,7 @@ package com.back.boundedcontext.member.in.init;
 import com.back.boundedcontext.member.app.MemberFacade;
 import com.back.boundedcontext.member.domain.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,9 @@ public class MemberDataInit {
     private final MemberDataInit self;
     private final MemberFacade memberFacade;
 
+    @Value("${app.event-publisher.type}")
+    private String publisherType;
+
     public MemberDataInit(
             @Lazy MemberDataInit self,
             MemberFacade memberFacade
@@ -36,6 +40,9 @@ public class MemberDataInit {
     public ApplicationRunner memberDataInitApplicationRunner() {
         return args -> {
             self.makeBaseMembers();
+            if (publisherType.equalsIgnoreCase("kafka")) {
+                self.completeMemberDataInit();
+            }
         };
     }
 
@@ -49,5 +56,9 @@ public class MemberDataInit {
         Member user1Member = memberFacade.join("user1", "1234", "유저1").getData();
         Member user2Member = memberFacade.join("user2", "1234", "유저2").getData();
         Member user3Member = memberFacade.join("user3", "1234", "유저3").getData();
+    }
+
+    public void completeMemberDataInit() {
+        memberFacade.completeMemberDataInit();
     }
 }

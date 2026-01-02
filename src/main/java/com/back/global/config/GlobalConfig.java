@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * @author : JAKE
@@ -26,11 +27,12 @@ public class GlobalConfig {
             @Value("${app.event-publisher.type:spring}") String type,
             ApplicationEventPublisher applicationEventPublisher,
             KafkaTemplate<String, Object> kafkaTemplate,
-            KafkaResolver topicResolver
+            KafkaResolver topicResolver,
+            ObjectMapper objectMapper
     ) {
         DomainEventPublisher publisher =
                 "kafka".equalsIgnoreCase(type)
-                        ? new KafkaDomainEventPublisher(kafkaTemplate, topicResolver)
+                        ? new KafkaDomainEventPublisher(kafkaTemplate, topicResolver, objectMapper)
                         : new SpringDomainEventPublisher(applicationEventPublisher);
 
         GlobalConfig.eventPublisher = publisher;

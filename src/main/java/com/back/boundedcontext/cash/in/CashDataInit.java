@@ -5,6 +5,7 @@ import com.back.boundedcontext.cash.domain.CashLog;
 import com.back.boundedcontext.cash.domain.CashMember;
 import com.back.boundedcontext.cash.domain.Wallet;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,9 @@ public class CashDataInit {
     private final CashDataInit self;
     private final CashFacade cashFacade;
 
+    @Value("${app.event-publisher.type}")
+    private String publisherType;
+
     public CashDataInit(
             @Lazy CashDataInit self,
             CashFacade cashFacade
@@ -38,6 +42,11 @@ public class CashDataInit {
     @Order(2)
     public ApplicationRunner cashDataInitApplicationRunner() {
         return args -> {
+
+            if (!publisherType.equalsIgnoreCase("spring")) {
+                return;
+            }
+
             self.makeBaseCredits();
         };
     }

@@ -8,6 +8,7 @@ import com.back.boundedcontext.market.domain.Product;
 import com.back.shared.post.dto.PostDto;
 import com.back.shared.post.out.PostApiClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ public class MarketDataInit {
     private final PostApiClient postApiClient;
     private final MarketFacade marketFacade;
 
+    @Value("${app.event-publisher.type}")
+    private String publisherType;
+
     public MarketDataInit (
             @Lazy MarketDataInit self,
             MarketFacade marketFacade,
@@ -42,6 +46,11 @@ public class MarketDataInit {
     @org.springframework.core.annotation.Order(3)
     public ApplicationRunner marketDataInitApplicationRunnner() {
         return args -> {
+
+            if (!publisherType.equalsIgnoreCase("spring")) {
+                return;
+            }
+
             self.makeBaseProducts();
             self.makeBaseCartItems();
             self.makeBaseOrders();

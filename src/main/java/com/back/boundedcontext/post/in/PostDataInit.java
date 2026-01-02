@@ -6,6 +6,7 @@ import com.back.boundedcontext.post.domain.PostComment;
 import com.back.boundedcontext.post.domain.PostMember;
 import com.back.global.rsdata.RsData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ public class PostDataInit {
     private final PostDataInit self;
     private final PostFacade postFacade;
 
+    @Value("${app.event-publisher.type}")
+    private String publisherType;
+
     public PostDataInit(
             @Lazy PostDataInit self,
             PostFacade postFacade
@@ -41,6 +45,10 @@ public class PostDataInit {
     @Order(2)
     public ApplicationRunner postDataInitApplicationRunner() {
         return args -> {
+            if (!publisherType.equalsIgnoreCase("spring")) {
+                return;
+            }
+
             // 자기 자신을 의존성을 주입 (DI) 해서 함수를 호출함으로 SpringContext 프록시를 적용한 후에 함수를 수행할 수 있음
             // 따라서 @Transactional 어노테이션이 적용된 후에 함수가 동작함으로 기능도 정상 동작을 함
             self.makeBasePosts();

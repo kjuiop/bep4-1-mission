@@ -6,3 +6,5 @@ spring:
     driver-class-name: org.h2.Driver
   kafka:
     bootstrap-servers: localhost:19092
+    consumer:
+      auto-offset-reset: earliest
