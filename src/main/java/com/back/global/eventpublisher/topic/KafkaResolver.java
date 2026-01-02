@@ -7,6 +7,7 @@ import com.back.shared.job.event.JobReadyInitEvent;
 import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.market.event.MarketOrderPaymentRequestedEvent;
 import com.back.shared.market.event.MarketOrderRequestPaymentStartedEvent;
+import com.back.shared.market.event.MarketReadyInitEvent;
 import com.back.shared.member.event.CashMemberCreatedEvent;
 import com.back.shared.member.event.MarketMemberCreatedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
@@ -66,6 +67,8 @@ public class KafkaResolver {
             return CASH_EVENTS_TOPIC;
         } else if (event instanceof JobReadyInitEvent) {
             return JOB_EVENT_TOPIC;
+        } else if (event instanceof MarketReadyInitEvent) {
+            return MARKET_EVENTS_TOPIC;
         }
 
         return "unexpected-events";
@@ -87,6 +90,7 @@ public class KafkaResolver {
         if (event instanceof PostCommentCreatedEvent e) return String.valueOf(e.getPostComment().getPostId());
         if (event instanceof PostReadyInitEvent e) return "post-init-ready";
         if (event instanceof CashReadyInitEvent e) return "cash-init-ready";
+        if (event instanceof MarketReadyInitEvent e) return "market-init-ready";
         if (event instanceof JobReadyInitEvent e) return String.valueOf(e.getJob().getJobName());
         return null;
     }

@@ -2,6 +2,7 @@ package com.back.boundedcontext.market.in;
 
 import com.back.boundedcontext.market.app.MarketFacade;
 import com.back.global.eventpublisher.topic.DomainEventEnvelope;
+import com.back.shared.member.event.MarketMemberCreatedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,37 @@ public class MarketKafkaListener {
                 case "MemberModifiedEvent" -> {
                     MemberModifiedEvent event = objectMapper.treeToValue(envelope.getPayload(), MemberModifiedEvent.class);
                     marketFacade.syncMember(event.getMember());
+                }
+
+                default -> {
+                    // ignore
+                }
+            }
+        } catch (Exception e) {
+            log.error("Kafka consume failed. raw={}", value, e);
+            throw e;
+        }
+    }
+
+    @KafkaListener(topics = "market-events", groupId = "market-service")
+    @Transactional(propagation = REQUIRES_NEW)
+    public void marketEventHandle(String value) {
+
+        try {
+            DomainEventEnvelope envelope = objectMapper.readValue(value, DomainEventEnvelope.class);
+
+            switch (envelope.getEventType()) {
+
+                case "MarketMemberCreatedEvent" -> {
+                    MarketMemberCreatedEvent event = objectMapper.treeToValue(envelope.getPayload(), MarketMemberCreatedEvent.class);
+                    marketFacade.createCart(event.getMember());
+                }
+
+                case "MarketReadyInitEvent" -> {
+                    marketDataInit.makeBaseProducts();
+                    marketDataInit.makeBaseCartItems();
+                    marketDataInit.makeBaseOrders();
+                    marketDataInit.makeBasePaidOrders();
                 }
 
                 default -> {

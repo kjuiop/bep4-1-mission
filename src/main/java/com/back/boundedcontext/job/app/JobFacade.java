@@ -4,6 +4,7 @@ import com.back.boundedcontext.job.domain.DomainJobEvent;
 import com.back.boundedcontext.job.out.DomainJobEventRepository;
 import com.back.global.eventpublisher.DomainEventPublisher;
 import com.back.shared.cash.event.CashReadyInitEvent;
+import com.back.shared.market.event.MarketReadyInitEvent;
 import com.back.shared.post.event.PostReadyInitEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,9 @@ public class JobFacade {
             }
             case "cash-data-init" -> {
                 eventPublisher.publish(new CashReadyInitEvent());
+            }
+            case "market-data-init" -> {
+                eventPublisher.publish(new MarketReadyInitEvent());
             }
             default -> {
             }

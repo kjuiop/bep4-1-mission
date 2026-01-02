@@ -44,4 +44,25 @@ public class JobDto {
                 .satisfiedConditions(1)
                 .build();
     }
+
+    public static JobDto readyByMarketMemberForMarket() {
+        return JobDto.builder()
+                .jobName("market-data-init")
+                .satisfiedConditions(1)
+                .build();
+    }
+
+    public static JobDto readyByPostForMarket() {
+        return JobDto.builder()
+                .jobName("market-data-init")
+                .satisfiedConditions(1)
+                .build();
+    }
+
+    public static JobDto readyByCartForMarket() {
+        return JobDto.builder()
+                .jobName("market-data-init")
+                .satisfiedConditions(1)
+                .build();
+    }
 }

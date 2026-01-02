@@ -1,8 +1,9 @@
 package com.back.shared.member.dto;
 
-import com.back.boundedcontext.market.domain.MarketMember;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
  * @author : JAKE
  * @date : 25. 12. 26.
  */
-@AllArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class MarketMemberDto {
 
     private final long id;
@@ -21,15 +22,20 @@ public class MarketMemberDto {
     private final String nickname;
     private final int activityScore;
 
-    public MarketMemberDto(MarketMember member) {
-        this(
-                member.getId(),
-                member.getCreateDate(),
-                member.getModifyDate(),
-                member.getUsername(),
-                member.getNickname(),
-                member.getActivityScore()
-        );
+    @JsonCreator
+    public MarketMemberDto(
+            @JsonProperty("id") Long id,
+            @JsonProperty("username") String username,
+            @JsonProperty("nickname") String nickname,
+            @JsonProperty("activityScore") Integer activityScore,
+            @JsonProperty("createDate") LocalDateTime createDate,
+            @JsonProperty("modifyDate") LocalDateTime modifyDate
+    ) {
+        this.id = id;
+        this.createDate = createDate;
+        this.modifyDate = modifyDate;
+        this.username = username;
+        this.nickname = nickname;
+        this.activityScore = activityScore;
     }
-
 }
